@@ -4,18 +4,24 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <style>li {list-style: none;}</style>
   <style>p.indent{ padding-left: 1.8em }</style>
+
 </head>
 <body>
   <h2>Enter username and password</h2>
   <ul>
     <form name="display" action="index.php" method="POST" >
       <li>Username:</li>
-      <li><input type="text" name="username" /></li>
+
+        <li><input type="text" name="username" /></li>
 	  <p class="indent"></p>
 	  <li>Password:</li>
 	  <li><input type="text" name="userpass" /></li>
 	  <p class="indent"></p>
       <li><input type="submit" name="submit" /></li>
+	  <li><input type="submit" name="submitCreate" value = "Create new account" /></li>
+    </form>
+  </ul>
+  <?php
     </form>
   </ul>
   <?php
@@ -42,6 +48,15 @@
 			//echo "found matching user with UID = $userRow[uid]";
 		}
 	}
+  
+    if (isset($_POST['submitCreate'])) {
+		  $host = $_SERVER['HTTP_HOST'];
+		  $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+		  $extra = 'createaccount.php';
+		  header("Location: http://$host$uri/$extra");
+		  exit;
+	  }
+  
     ?> 
 
 </body>
