@@ -28,7 +28,7 @@ create table investments (
 	projectID varchar(50) NOT NULL,
 	ownerName varchar(50) NOT NULL,
 	PRIMARY KEY (investmentID),
-	FOREIGN KEY (projectID, ownerName) REFERENCES projectOwnership(projectID, ownerName),
+	FOREIGN KEY (projectID, ownerName) REFERENCES projectsOwnership(projectID, ownerName),
 	FOREIGN KEY (investorName) REFERENCES users(userName));
 
 

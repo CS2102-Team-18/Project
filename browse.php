@@ -13,7 +13,8 @@
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 
   	// Connect to the database. 
-    $db     = pg_connect("host=localhost port=5432 dbname=Project1 user=postgres password=wzcs2102");	
+    include 'db.php';
+	$db = init_db();	
 
 	//Display all projects
 	echo "<h2>ALL PROJECTS</h2>";
