@@ -13,6 +13,15 @@ include 'db.php';
 $db = init_db();	
 $result = pg_query($db, "SELECT username FROM users WHERE uid=$UID");
 $userRow = pg_fetch_assoc($result);
+
+//logging out
+if(isset($_GET['logout'])){
+	$link=$_GET['logout'];
+	if ($link == 'true'){
+		header("Location: logout.php");
+		exit;
+	}
+}
 ?>
 
 <!DOCTYPE html>  
