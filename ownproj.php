@@ -9,7 +9,7 @@
 
 	//Display all projects
 	//echo "<h2>ALL PROJECTS</h2>";
-	$result = pg_query($db, "SELECT * FROM projectsOwnership");
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME'");
 	$rows = pg_fetch_assoc($result);
 
 	if (!$result) {
@@ -20,14 +20,33 @@
 	$x = 0;
 	$table_contents = NULL;
 	foreach ($arr as $value){
+		$row = array_values($value);
+		$pid = $row[4];	//record pid of the project
 		$table_contents .= "<tr>";
 		foreach($value as $value2){
-			$table_contents .= "<td>" . $value2 . "</td>";
+			if($x == 0){
+				$table_contents .= "<td><a href='?detail=$pid'>" . $value2 . "</a></td>";
+			} else if($x == 4) {
+				//do nothing
+			} else {
+				$table_contents .= "<td>" . $value2 . "</td>";
+			}
 			$x++;
 			if($x == 9){
 				$table_contents .= "</tr>";
 				$x = 0;
 			}
+		}
+	}
+
+	if(isset($_GET['detail'])){
+		$link=$_GET['detail'];
+		if(!empty($link)){
+			//set session variables for project id and project name..acts as a global variable?
+			$_SESSION['PID']=$link;
+			$_SESSION['PNAME']=$UNAME;
+			$_SESSION['OWNPROJECT']=true;
+			header("Location: detailedproj.php");
 		}
 	}
 	
@@ -79,11 +98,10 @@ else{
   <table class="w3-table-all">
     <thead>
       <tr class="w3-red">
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Project Name</th>
+        <th>Project Description</th>
         <th>Start Date</th>
 		<th>End Date</th>
-		<th>ID</th>
 		<th>Owner</th>
 		<th>Target</th>
 		<th>Progress</th>

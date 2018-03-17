@@ -23,6 +23,7 @@ if (isset($_POST['submit'])) {
 	} else {
 		$_SESSION['UID'] = $userRow[uid];
 		$_SESSION['UNAME'] = $_POST[username];
+		$_SESSION['OWNPROJECT'] = NULL;
 		$host  = $_SERVER['HTTP_HOST'];
 		$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 		$extra = 'profile.php';
