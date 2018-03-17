@@ -4,7 +4,7 @@ Topic B: Crowdfunding
 # Todo
 
 BackEnd
-1. Logout function
+1. Logout function (done)
 2. User can change their password
 3. Search for project function
 4. Project page functions
