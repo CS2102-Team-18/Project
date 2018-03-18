@@ -35,6 +35,7 @@
 		$projdesc = $arr2[1];
 		$projSDate = $arr2[2];
 		$projEDate = $arr2[3];
+		$projOName = $arr2[5];
 		$projamount = $arr2[6];
 		$projprogress = $arr2[7];
 		$projcat = $arr2[8];
@@ -111,7 +112,7 @@ if(!is_null($OWNPROJECT)){
 	<p>      
     <label class='w3-text-brown'><b>Target Amount</b></label></p>
 	<p>
-    <label class='w3-text-black w3-border w3-sand'>lel</label></p>
+    <label class='w3-text-black w3-border w3-sand'>$projamount</label></p>
 
 	<p>      
     <label class='w3-text-brown'><b>Progress</b></label></p>
@@ -124,6 +125,51 @@ if(!is_null($OWNPROJECT)){
     <label class='w3-text-black w3-border w3-sand'>$projcat</label></p>
 	
     <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information..pagenotdone'></button></p>
+	</form>";
+} else if(is_null($OWNPROJECT)){
+	echo "
+	<form class='w3-container' action='editproj.php' method='POST'>
+    <p>      
+    <label class='w3-text-brown'><b>Project Name</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projname</label></p>
+
+    <p>      
+    <label class='w3-text-brown'><b>Project Description</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projdesc</label></p>
+
+	<p>      
+    <label class='w3-text-brown'><b>Start Date</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projSDate</label></p>
+
+	<p>      
+    <label class='w3-text-brown'><b>End Date</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projEDate</label></p>
+
+	<p>      
+    <label class='w3-text-brown'><b>Owner Name</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projOName</label></p>
+
+	<p>      
+    <label class='w3-text-brown'><b>Target Amount</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projamount</label></p>
+
+	<p>      
+    <label class='w3-text-brown'><b>Progress</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projprogress</label></p>
+
+	<p>      
+    <label class='w3-text-brown'><b>Category</b></label></p>
+	<p>
+    <label class='w3-text-black w3-border w3-sand'>$projcat</label></p>
+	
+    <input class='w3-btn w3-brown' type='submit' name='submit' value='Contribute to this project...pagenotdone'></button></p>
 	</form>";
 }
 ?>

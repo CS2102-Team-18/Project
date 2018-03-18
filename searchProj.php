@@ -2,14 +2,19 @@
 	session_start();
 	$UID = $_SESSION['UID'];		//retrieve UID
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
+	$SEARCHVALUE = $_SESSION['SEARCHVALUE']; //retrieve search value
+	$SEARCHFIELD = $_SESSION['SEARCHFIELD']; //retrieve search field
 
   	// Connect to the database. 
     include 'db.php';
 	$db = init_db();	
 
-	//Display all projects
-	//echo "<h2>ALL PROJECTS</h2>";
-	$result = pg_query($db, "SELECT * FROM projectsOwnership");
+	//Display searched projects
+	/* debugging
+	echo "<br><br>";
+	echo "<h2>$SEARCHVALUE $SEARCHFIELD</h2>";
+	*/
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')");
 	$rows = pg_fetch_assoc($result);
 
 	if (!$result) {
@@ -21,8 +26,8 @@
 	$table_contents = NULL;
 	foreach ($arr as $value){
 		$row = array_values($value);
-		$pid = $row[4]; //record pid of projects
-		$pname = $row[5]; //record project creator name
+		$pid = $row[4];	//record pid of the project
+		$pname = $row[5]; //record owner of project
 		$table_contents .= "<tr>";
 		foreach($value as $value2){
 			if($x == 0){
@@ -39,7 +44,7 @@
 			}
 		}
 	}
-	
+
 	if(isset($_GET['detail'])){
 		$link=$_GET['detail'];
 		if(!empty($link)){
@@ -48,11 +53,15 @@
 			$pname = preg_replace('/[0-9]+/', '', $link); //retrieve pname
 			$_SESSION['PID']=$pid;
 			$_SESSION['PNAME']=$pname;
-			$_SESSION['OWNPROJECT']=NULL;
+			if($pname == $UNAME){
+				$_SESSION['OWNPROJECT']=true;
+			} else {
+				$_SESSION['OWNPROJECT']=NULL;
+			}
 			header("Location: detailedproj.php");
 		}
 	}
-
+	
 	//logging out
 	if(isset($_GET['logout'])){
 		$link=$_GET['logout'];
@@ -101,8 +110,8 @@ else{
   <table class="w3-table-all">
     <thead>
       <tr class="w3-red">
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Project Name</th>
+        <th>Project Description</th>
         <th>Start Date</th>
 		<th>End Date</th>
 		<th>Owner</th>
