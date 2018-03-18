@@ -6,7 +6,7 @@ Topic B: Crowdfunding
 BackEnd
 1. Logout function (done)
 2. User can change their password
-3. Search for project function
+3. Search for project function (done)
 4. Project page functions
 
 FrontEnd
