@@ -13,14 +13,33 @@ include 'db.php';
 $db = init_db();
 
 $result = pg_query($db, "SELECT uid FROM users WHERE username = '$_POST[username]' AND pssword = '$_POST[userpass]'");
+$isBannedResult = pg_query($db, "SELECT isBanned FROM users WHERE username = '$_POST[username]' AND pssword = '$_POST[userpass]'");
+
+$isBanned = pg_fetch_result($isBannedResult, 0, 0);
+
 
 
 if (isset($_POST['submit'])) {
+
+//echo '<br>test</br>';
+echo '<br>^^^^^^</br>'; //space placeholder
+//echo "$isBanned";
+
+//$typeIsBanned = gettype($isBanned);
+//echo "$typeIsBanned";
+
+	
 	$userRow = pg_fetch_assoc($result);
 	$userFound = pg_num_rows($result);
 	if ($userFound < 1) {
 		echo "no rows found\n";
-	} else {
+	} 
+
+	else if ($isBanned == 't') {
+		echo 'User is banned. Please contact the administrator for more details.';
+	}
+
+	else if ($isBanned == 'f') {
 		$_SESSION['UID'] = $userRow[uid];
 		$_SESSION['UNAME'] = $_POST[username];
 		$_SESSION['OWNPROJECT'] = NULL;
@@ -33,13 +52,10 @@ if (isset($_POST['submit'])) {
 	}
 }
 
-if (isset($_POST['submitCreate'])) {
-	  $host = $_SERVER['HTTP_HOST'];
-	  $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-	  $extra = 'register.php';
-	  header("Location: http://$host$uri/$extra");
-	  exit;
-  }
+	if(isset($_POST['submitCreate'])){
+		header("Location: register.php");
+	}
+
 ?>
   
 <html>
