@@ -9,6 +9,8 @@ BackEnd
 3. Search for project function (done)
 4. Project page functions
 
+After pulling, alter projectownership table and modify 'progress' column to type float for pay.php to work correctly.
+
 FrontEnd
 1. Implement proper browse function
 2. Project Page
