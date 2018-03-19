@@ -101,8 +101,8 @@ else{
   <table class="w3-table-all">
     <thead>
       <tr class="w3-red">
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Project Name</th>
+        <th>Project Description</th>
         <th>Start Date</th>
 		<th>End Date</th>
 		<th>Owner</th>

@@ -4,9 +4,10 @@
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 
 	if (isset($_POST['search'])) {
+	  $_SESSION['VIEWMODE'] = "SEARCHPROJECT";
 	  $_SESSION['SEARCHVALUE'] = $_POST['searchvalue'];
 	  $_SESSION['SEARCHFIELD'] = $_POST['searchfield'];
-	  header("Location: searchProj.php");
+	  header("Location: view.php");
 	  exit;
   }
 

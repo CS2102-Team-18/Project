@@ -25,17 +25,19 @@ if(isset($_GET['logout'])){
 
 //view all Projects
 if (isset($_POST['allProjects'])) {
-	header("Location: index.php");
+	$_SESSION['VIEWMODE'] = NULL;
+	header("Location: view.php");
 	exit;
 }
 
 //view own Projects
 if (isset($_POST['myProjects'])) {
-	header("Location: ownproj.php");
+	$_SESSION['VIEWMODE'] = "OWNPROJECT";
+	header("Location: view.php");
 	exit;
 }
 
-/* for donate future implementation
+/* for possible step-by-step donate future implementation?
 if (isset($_POST['donate'])) {
 	header("Location: donate.php");
 	exit;
@@ -76,7 +78,7 @@ else{
 	<p>
 	<input class="w3-btn w3-brown" type="submit" name="myProjects" value="View My Projects"></button>
 	<p>
-	<input class="w3-btn w3-brown" type="submit" name="donate" value="Contribute to a Project"></button>
+	<input class="w3-btn w3-brown" type="submit" name="donate" value="ignore this button"></button>
 	</p>
   </form>
 </div>
