@@ -2,6 +2,7 @@
 session_start();
 
 $UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
+$date = date("Y-m-d"); 
 
 if($UNAME != NULL){
 	header("Location: profile.php");
@@ -12,7 +13,10 @@ include 'db.php';
 $db = init_db();		
 
 if (isset($_POST['submit'])) {
-	if ($_POST[passwordInput] == $_POST[passwordSecondInput]){
+
+$passwordLength = strlen("$_POST[passwordInput]");
+
+	if (($_POST[passwordInput] == $_POST[passwordSecondInput]) && ($passwordLength >= 8)){
 		$sql = "SELECT MAX(uid) + 1 AS maxID FROM users";
 		$nextIdResult = pg_query($db, $sql);
 		
@@ -20,8 +24,8 @@ if (isset($_POST['submit'])) {
 		
 		$nextId = $row[maxid];
 		
-		$sqlIn = "INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin)
-				values ('$nextId', '$_POST[usernameInput]', '$_POST[passwordInput]', date '2018-02-03', false)";
+		$sqlIn = "INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
+				values ('$nextId', '$_POST[usernameInput]', '$_POST[passwordInput]', '$date', false, false, '$_POST[billingAddressInput]')";
 		
 		$sqlCheckUsername = "SELECT * FROM users WHERE username = '$_POST[usernameInput]'";
 		$usernameExistResult = pg_query($db, $sqlCheckUsername);
@@ -31,21 +35,31 @@ if (isset($_POST['submit'])) {
 		
 		$aresult = pg_query($db, $sqlIn);
 		if (!$aresult && $isExist != 0) {
+			echo "<br>^^^^^</br>"; //space placeholder
 			echo "An error occured\n";
 			echo "<br>";
 		}
 		
 		else if (!$aresult && $isExist == 0){
+			echo "<br>^^^^^</br>"; //space placeholder
 			echo "Username already exists!";
 		}
 		
-		else {
-			echo "Created account successfully \n ";
+		else {	
+			echo "<br>^^^^^</br>"; //space placeholder
+			echo "Created account successfully! Please login. \n ";
 		}			
 	}
-	else {  
-	  echo "Password do not match!";
-	}
+
+		else if ($passwordLength < 8) {
+			echo "<br>^^^^^</br>"; //space placeholder
+			echo "Password must have 8 or more characters!";
+		}
+
+		else {  
+	 		echo "<br>^^^^^</br>"; //space placeholder
+	 	        echo 'Password do not match!';
+		}
 }	
 ?> 
 
@@ -88,8 +102,13 @@ else{
     <label class="w3-text-brown"><b>Confirm Password</b></label>
     <input class="w3-input w3-border w3-sand" name="passwordSecondInput" type="password"></p>
     <p>
+    <label class="w3-text-brown"><b>Billing Address</b></label>
+    <input class="w3-input w3-border w3-sand" name="billingAddressInput" type="text"></p>
+    <p>
     <input class="w3-btn w3-brown" type="submit" name="submit" value="Register"></button></p>
+<p></p>
   </form>
+<p></p>
 </div>
 </body>
 </html>
