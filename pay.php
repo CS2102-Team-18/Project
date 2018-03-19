@@ -1,10 +1,10 @@
+
 <?php
 	session_start();
 	$UID = $_SESSION['UID'];		//retrieve UID
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 	$PID = $_SESSION['PID'];
 	$PNAME = $_SESSION['PNAME'];
-	$OWNPROJECT = $_SESSION['OWNPROJECT'];
 
   	// Connect to the database. 
     include 'db.php';
@@ -41,9 +41,36 @@
 		$projcat = $arr2[8];
 	}
 
-	//contribute to project
+	//execute payment query
 	if(isset($_POST['pay'])){
-		header("Location: pay.php");
+		//query here and show confirmation/bring to payment confirm page
+		
+		//get invest amount, invest type, current date
+		$payvalue = $_POST['payvalue'];
+		$payfield = $_POST['payfield'];
+		$dateinvested = date("Y-m-d");
+
+		//get next investmentID
+		$sql = "SELECT MAX(CAST(investmentID AS INT)) + 1 AS maxID FROM investments";
+		$nextIDResult = pg_query($db, $sql);
+		$row = pg_fetch_assoc($nextIDResult);
+		$nextId = $row[maxid];		
+
+		//update investment table in db
+		$result = pg_query($db, "INSERT INTO investments(amount, dateInvested, investmentID, investorName, projectID, ownerName)
+								values ('$payvalue', '$dateinvested', '$nextId', '$UNAME', '$PID', '$PNAME')");
+
+		//update projectsownership in db
+		$sql = "SELECT targetAmount AS targetamount,progress AS progress FROM projectsOwnership WHERE projectID = '$PID' AND ownerName = '$PNAME'";
+		$result = pg_query($db, $sql);
+		$row = pg_fetch_assoc($result);
+		$targetamount = $row[targetamount];
+		$progress = $row[progress];
+		$progress = (($progress * $targetamount) + $payvalue) / $targetamount;
+
+		//debug
+		// "<br><h2>$progress</h2>";
+		$result = pg_query($db, "UPDATE projectsOwnership SET progress = '$progress' WHERE projectID = '$PID' AND ownerName = '$PNAME'");
 	}
 	
 	//logging out
@@ -90,49 +117,8 @@ else{
 -->
 
 <!-- Main Body -->
-<?php
-if(!is_null($OWNPROJECT)){
-	echo "
-	<form class='w3-container' method='POST'>
-    <p>      
-    <label class='w3-text-brown'><b>Project Name</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projname</label></p>
-
-    <p>      
-    <label class='w3-text-brown'><b>Project Description</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projdesc</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Start Date</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projSDate</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>End Date</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projEDate</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Target Amount</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projamount</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Progress</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projprogress</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Category</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projcat</label></p>
-	
-    <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information..pagenotdone'></button></p>
-	</form>";
-} else if(is_null($OWNPROJECT)){
-	echo "
+<?php //need to update database with payment types
+echo "
 	<form class='w3-container' method='POST'>
     <p>      
     <label class='w3-text-brown'><b>Project Name</b></label></p>
@@ -173,10 +159,21 @@ if(!is_null($OWNPROJECT)){
     <label class='w3-text-brown'><b>Category</b></label></p>
 	<p>
     <label class='w3-text-black w3-border w3-sand'>$projcat</label></p>
-	
-    <input class='w3-btn w3-brown' type='submit' name='pay' value='Contribute to this project...pagenotdone'></button></p>
+
+	<hr>
+
+    <p>
+	<label class='w3-text-brown'><b>Contribution Amount:</b></label></p>
+	<p>
+	<input class='w3-input w3-border w3-sand' name='payvalue' type='number'></p>
+	<label class='w3-text-brown'><b>Make Contribution With:</b></label>
+    <select name='payfield'>
+		<option value='paypal'>Paypal</option>
+		<option value='enets'>eNETS</option>
+		<option value='creditcard'>Credit Card</option>
+    </select>
+    <input class='w3-btn w3-brown' type='submit' name='pay' value='Contribute!'></button>
 	</form>";
-}
 ?>
 
 <!-- Import Javascript Files -->
