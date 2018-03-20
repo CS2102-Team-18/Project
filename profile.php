@@ -37,6 +37,18 @@ if (isset($_POST['myProjects'])) {
 	exit;
 }
 
+//update billing address
+if (isset($_POST['updateBillingAdd'])) {
+	header("Location: updateBillingAddress.php");
+	exit;
+}
+
+//change password
+if (isset($_POST['changePassword'])) {
+	header("Location: changePassword.php");
+	exit;
+}
+
 /* for possible step-by-step donate future implementation?
 if (isset($_POST['donate'])) {
 	header("Location: donate.php");
@@ -78,6 +90,10 @@ else{
 	<p>
 	<input class="w3-btn w3-brown" type="submit" name="myProjects" value="View My Projects"></button>
 	<p>
+	<input class="w3-btn w3-brown" type="submit" name="updateBillingAdd" value="Update Billing Address (to be added in future)"></button>
+	</p>
+	<input class="w3-btn w3-brown" type="submit" name="changePassword" value="Change Password"></button>
+	</p>	
 	<input class="w3-btn w3-brown" type="submit" name="donate" value="ignore this button"></button>
 	</p>
   </form>

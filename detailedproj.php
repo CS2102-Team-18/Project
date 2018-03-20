@@ -45,6 +45,14 @@
 	if(isset($_POST['pay'])){
 		header("Location: pay.php");
 	}
+
+	if (isset($_POST['submit'])) {
+	  $host = $_SERVER['HTTP_HOST'];
+	  $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	  $extra = 'editproj.php';
+	  header("Location: http://$host$uri/$extra");
+	  exit;
+  }
 	
 	//logging out
 	if(isset($_GET['logout'])){
@@ -99,6 +107,8 @@ if(!is_null($OWNPROJECT)){
 	<p>
     <label class='w3-text-black w3-border w3-sand'>$projname</label></p>
 
+   	
+
     <p>      
     <label class='w3-text-brown'><b>Project Description</b></label></p>
 	<p>
@@ -129,7 +139,7 @@ if(!is_null($OWNPROJECT)){
 	<p>
     <label class='w3-text-black w3-border w3-sand'>$projcat</label></p>
 	
-    <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information..pagenotdone'></button></p>
+    <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information'></button></p>
 	</form>";
 } else if(is_null($OWNPROJECT)){
 	echo "
@@ -138,6 +148,7 @@ if(!is_null($OWNPROJECT)){
     <label class='w3-text-brown'><b>Project Name</b></label></p>
 	<p>
     <label class='w3-text-black w3-border w3-sand'>$projname</label></p>
+
 
     <p>      
     <label class='w3-text-brown'><b>Project Description</b></label></p>
