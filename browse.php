@@ -10,16 +10,6 @@
 	  header("Location: view.php");
 	  exit;
   }
-
-	//logging out
-	if(isset($_GET['logout'])){
-		$link=$_GET['logout'];
-		if ($link == 'true'){
-			header("Location: logout.php");
-			exit;
-		}
-	}	
-	
 ?> 
 
 <!DOCTYPE html>  

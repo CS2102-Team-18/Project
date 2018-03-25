@@ -23,7 +23,7 @@ if (isset($_POST['submit'])) {
 
 //echo '<br>test</br>';
 echo '<br>^^^^^^</br>'; //space placeholder
-//echo "$isBanned";
+//echo $isBanned;
 
 //$typeIsBanned = gettype($isBanned);
 //echo "$typeIsBanned";
@@ -32,11 +32,16 @@ echo '<br>^^^^^^</br>'; //space placeholder
 	$userRow = pg_fetch_assoc($result);
 	$userFound = pg_num_rows($result);
 	if ($userFound < 1) {
-		echo "no rows found\n";
+		echo "<div class=\"w3-panel w3-yellow\">
+		  <p>Invaild Usernname or Password</p>
+		</div>";
 	} 
 
 	else if ($isBanned == 't') {
-		echo 'User is banned. Please contact the administrator for more details.';
+		echo "<div class=\"w3-panel w3-red\">
+		  <h3>User Banned!</h3>
+		  <p>Please contact the administrator for more details.</p>
+		</div>";
 	}
 
 	else if ($isBanned == 'f') {

@@ -7,37 +7,53 @@
     include 'db.php';
 	$db = init_db();	
 
-	//Display all projects
-	//echo "<h2>ALL PROJECTS</h2>";
-	$result = pg_query($db, "SELECT * FROM projectsOwnership");
+	$SEARCH = $_GET['search'];
+	$SEARCHVALUE = $_POST['searchvalue'];
+	$SEARCHFIELD = $_POST['searchfield'];
+	
+	//Search Query
+	if($SEARCH == "myprojects"){
+		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME'"); //query for own projects view
+	} else if(isset($SEARCHFIELD) && isset($SEARCHVALUE)){
+		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')"); //query for search
+	} else {
+		$result = pg_query($db, "SELECT * FROM projectsOwnership"); //query for all projects - default view
+	}
+	
+	//$result = pg_query($db, "SELECT * FROM projectsOwnership");
 	$rows = pg_fetch_assoc($result);
 
 	if (!$result) {
 		echo "error getting proj from db";
 	}
 
-	$arr = pg_fetch_all($result);
+	$projects = pg_fetch_all($result);
 	$x = 0;
 	$table_contents = NULL;
-	foreach ($arr as $value){
-		$row = array_values($value);
-		$pid = $row[4]; //record pid of projects
-		$pname = $row[5]; //record project creator name
-		$table_contents .= "<tr>";
-		foreach($value as $value2){
-			if($x == 0){
-				$table_contents .= "<td><a href='?detail=$pid$pname'>" . $value2 . "</a></td>";
-			} else if($x == 4) {
-				//do nothing
-			} else {
-				$table_contents .= "<td>" . $value2 . "</td>";
-			}
-			$x++;
-			if($x == 9){
-				$table_contents .= "</tr>";
-				$x = 0;
-			}
-		}
+	foreach ($projects as $project){
+		$row = array_values($project);
+		$name = $row[0];
+		$description = $row[1];
+		$startDate = $row[2];
+		$endDate = $row[3];
+		$id = $row[4];
+		$ownerName = $row[5];
+		$amount = $row[6];
+		$progress = $row[7];
+		$category = $row[8];
+		
+		//Caclucate the progres bar %
+		$bar = $progress / $amount;
+		
+		//Generate HTML code for each project
+		$table_contents .= "<div class='w3-panel w3-pale-green w3-leftbar w3-border-green'>";
+		$table_contents .= "<h3><b>" . $name . "</b></h3>";
+		$table_contents .= "<p>Amount Raised: " . $progress . "</p>";
+		$table_contents .= "<div class='w3-light-grey w3-quarter'><div class='w3-green' style='height:24px;width:" . $bar . "%'></div></div><br>";
+		$table_contents .= "<p>" . $description. "</p>";
+		$table_contents .= "<a href='?detail=" . $id . $ownerName . "' class='w3-button w3-green'>Go to Project</a>";
+		$table_contents .= "<p class='w3-right'>" . $category . "</p>";
+		$table_contents .= "</div>";
 	}
 	
 	if(isset($_GET['detail'])){
@@ -48,20 +64,9 @@
 			$pname = preg_replace('/[0-9]+/', '', $link); //retrieve pname
 			$_SESSION['PID']=$pid;
 			$_SESSION['PNAME']=$pname;
-			$_SESSION['OWNPROJECT']=NULL;
 			header("Location: detailedproj.php");
 		}
 	}
-
-	//logging out
-	if(isset($_GET['logout'])){
-		$link=$_GET['logout'];
-		if ($link == 'true'){
-			header("Location: logout.php");
-			exit;
-		}
-	}	
-	
 ?> 
 
 <!DOCTYPE html>  
@@ -97,24 +102,28 @@ else{
 -->
 
 <!-- Main Body -->
+<div class="w3-row">
+  <div class="w3-col m3 w3-center"><p></p></div>
+  <div class="w3-col m6 w3-center"><p></p>
+  	<form class="w3-container w3-center" action="index.php" method="POST">
+		<p>
+		<input class="w3-input w3-border w3-sand" name="searchvalue" type="text"></p>
+		<label class="w3-text-brown"><b>Search Under:</b></label>
+		<select name="searchfield">
+			<option value="projectname">Project Name</option>
+			<option value="projectdescription">Project Description</option>
+			<option value="category">Project Category</option>
+		</select>
+		<input class="w3-btn w3-brown" type="submit" name="search" value="Search"></button>
+	</form>
+  </div>
+  <div class="w3-col m3 w3-center"><p></p></div>
+</div>
+
 <div class="w3-container">
-  <table class="w3-table-all">
-    <thead>
-      <tr class="w3-red">
-        <th>Project Name</th>
-        <th>Project Description</th>
-        <th>Start Date</th>
-		<th>End Date</th>
-		<th>Owner</th>
-		<th>Target</th>
-		<th>Progress</th>
-		<th>Category</th>
-      </tr>
-    </thead>
 	<?php
 	echo $table_contents;
 	?>
-  </table>
 </div>
   
 <!-- Import Javascript Files -->

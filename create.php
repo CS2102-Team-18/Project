@@ -36,16 +36,6 @@ values ('$_POST[projName]', '$_POST[projDesc]', date '$_POST[sDate]', date '$_PO
 			echo "Create project successful\n";
 		}
 	}
-
-	//logging out
-	if(isset($_GET['logout'])){
-		$link=$_GET['logout'];
-		if ($link == 'true'){
-			header("Location: logout.php");
-			exit;
-		}
-	}
-
 ?> 
 
 <!DOCTYPE html>  

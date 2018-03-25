@@ -6,6 +6,11 @@
 	$PID = $_SESSION['PID'];
 	$PNAME = $_SESSION['PNAME'];
 
+	if($UNAME == NULL){
+		header("Location: login.php");
+		die();
+	}
+	
   	// Connect to the database. 
     include 'db.php';
 	$db = init_db();	
