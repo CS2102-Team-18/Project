@@ -3,7 +3,9 @@ create table users (
 	userName varchar(50),
 	pssword varchar(50),
 	dateJoined date,
-	isAdmin boolean,
+	isAdmin boolean NOT NULL,
+	isBanned boolean NOT NULL,
+	billingAddress varchar(100),
     PRIMARY KEY (userName)
     );
 
@@ -32,20 +34,20 @@ create table investments (
 	FOREIGN KEY (investorName) REFERENCES users(userName));
 
 
-INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin)
-values ('1', 'Bob', '12345', date '2018-02-01', false);
+INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
+values ('1', 'Bob', '12345', date '2018-02-01', false, false, 'Blk 1, Yishun St 20, 15-32');
 
-INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin)
-values ('2', 'Alice', '12345', date '2018-02-02', false);
+INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
+values ('2', 'Alice', '12345', date '2018-02-02', false, false, 'Blk 2, Ang Mo Kio St 1, 08-23');
 
-INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin)
-values ('3', 'Charles', '12345', date '2018-02-02', false);
+INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
+values ('3', 'Charles', '12345', date '2018-02-02', false, true, 'Blk 3, Yio Chu Kang St 2, 1-20');
 
-INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin)
-values ('4', 'David', '12345', date '2018-02-03', true);
+INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
+values ('4', 'David', '12345', date '2018-02-03', true, false, 'Blk 4, Toa Payoh St 61, 12-23');
 
-INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin)
-values ('5', 'Elton', '12345', date '2018-02-03', true);
+INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
+values ('5', 'Elton', '12345', date '2018-02-03', true, false, 'Blk 5, Lim Chu Kang, 5-02');
 
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category)
