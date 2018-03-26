@@ -30,7 +30,7 @@ create table investments (
 	investmentType varchar(50) NOT NULL,
 	projectID varchar(50) NOT NULL,
 	ownerName varchar(50) NOT NULL,
-    CONSTRAINT chk_InvestmentType CHECK (investmentType IN ('eNETS', 'Paypal', 'Credit Card')),
+    	CONSTRAINT chk_InvestmentType CHECK (investmentType IN ('eNETS', 'Paypal', 'Credit Card')),
 	PRIMARY KEY (investmentID),
 	FOREIGN KEY (projectID, ownerName) REFERENCES projectsOwnership(projectID, ownerName),
 	FOREIGN KEY (investorName) REFERENCES users(userName));
