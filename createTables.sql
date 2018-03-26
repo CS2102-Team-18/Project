@@ -17,7 +17,7 @@ create table projectsOwnership (
 	projectID varchar(50),
 	ownerName varchar(10)NOT NULL,
 	targetAmount int NOT NULL CHECK (targetAmount > 0),
-	progress int NOT NULL CHECK (progress >= 0 and progress <=1),
+	progress int NOT NULL CHECK (progress >= 0),
 	category varchar(20),
 	PRIMARY KEY (projectID, ownerName),
 	FOREIGN KEY (ownerName) REFERENCES users(userName));
@@ -27,8 +27,10 @@ create table investments (
 	dateInvested date NOT NULL,
 	investmentID varchar(100),
 	investorName varchar(50) NOT NULL,
+	investmentType varchar(50) NOT NULL,
 	projectID varchar(50) NOT NULL,
 	ownerName varchar(50) NOT NULL,
+    CONSTRAINT chk_InvestmentType CHECK (investmentType IN ('eNETS', 'Paypal', 'Credit Card')),
 	PRIMARY KEY (investmentID),
 	FOREIGN KEY (projectID, ownerName) REFERENCES projectsOwnership(projectID, ownerName),
 	FOREIGN KEY (investorName) REFERENCES users(userName));
@@ -60,9 +62,9 @@ INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDat
 values ('Seeking funding for building new hospital', 'TTS hospital', date '2018-02-20', date '2018-07-20', '2', 'Bob', 1000000, 0, 'Others');
 
 
-INSERT INTO investments(amount, dateInvested, investmentid, investorName, projectID, ownerName)
-values (500, date '2018-02-23', '2', 'Bob', '1', 'Alice');
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (500, date '2018-02-23', '2', 'Bob', 'eNETS', '1', 'Alice');
 
-INSERT INTO investments(amount, dateInvested, investmentid, investorName, projectID, ownerName)
-values (500, date '2018-02-23', '1', 'David', '1', 'Alice');
-	
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (500, date '2018-02-23', '1', 'David', 'Paypal', '1', 'Alice');
+
