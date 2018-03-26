@@ -1,6 +1,35 @@
 # Project
 Topic B: Crowdfunding
 
+
+# Todo (26th March 2018)
+projectsownership - progress - change to actual amount
+		  - add a project status column
+
+payment - add payment type
+
+
+
+backend
+users can halt/delete their projects
+users can view past completed projects
+users can edit billing address
+
+investors can keep track of projects they have invested in
+investors can check their total amount invested and each individual project investment
+investors can check investment history(sort by date)
+
+admin control panel
+
+Create a Project -> Message to indicate successful project created
+Automatic Start Date
+
+
+
+remember to add error handling messages!
+
+
+
 # Todo
 
 BackEnd
