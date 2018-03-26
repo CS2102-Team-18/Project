@@ -32,8 +32,10 @@ create table investments (
 	ownerName varchar(50) NOT NULL,
     CONSTRAINT chk_InvestmentType CHECK (investmentType IN ('eNETS', 'Paypal', 'Credit Card')),
 	PRIMARY KEY (investmentID),
-	FOREIGN KEY (projectID, ownerName) REFERENCES projectsOwnership(projectID, ownerName),
-	FOREIGN KEY (investorName) REFERENCES users(userName));
+	FOREIGN KEY (projectID, ownerName) REFERENCES projectsOwnership(projectID, ownerName)
+	on delete cascade,
+	FOREIGN KEY (investorName) REFERENCES users(userName)
+	on delete cascade);
 
 
 INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
@@ -67,4 +69,5 @@ values (500, date '2018-02-23', '2', 'Bob', 'eNETS', '1', 'Alice');
 
 INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
 values (500, date '2018-02-23', '1', 'David', 'Paypal', '1', 'Alice');
+
 
