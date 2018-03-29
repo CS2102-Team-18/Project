@@ -1,9 +1,9 @@
 <?php
 
 function init_db(){
-	$dbname = "Project1";
+	$dbname = "postgres";
 	$user = "postgres";
-	$password = "wzcs2102";
+	$password = "password";
 	return pg_connect("host=localhost port=5432 dbname=" . $dbname . " user=" . $user . " password=" . $password);	
 }
 ?>

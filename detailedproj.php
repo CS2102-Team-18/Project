@@ -4,7 +4,6 @@
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 	$PID = $_SESSION['PID'];
 	$PNAME = $_SESSION['PNAME'];
-	$OWNPROJECT = $_SESSION['OWNPROJECT'];
 
   	// Connect to the database. 
     include 'db.php';
@@ -27,34 +26,36 @@
 
 	echo "<br>";
 	*/
-	$arr = pg_fetch_all($result);
+	$projects = pg_fetch_all($result);
 
-	foreach ($arr as $value){
-		$arr2 = array_values($value);
-		$projname = $arr2[0];
-		$projdesc = $arr2[1];
-		$projSDate = $arr2[2];
-		$projEDate = $arr2[3];
-		$projOName = $arr2[5];
-		$projamount = $arr2[6];
-		$projprogress = $arr2[7];
-		$projcat = $arr2[8];
+	foreach ($projects as $project){
+		$row = array_values($project);
+		$name = $row[0];
+		$description = $row[1];
+		$startDate = $row[2];
+		$endDate = $row[3];
+		$id = $row[4];
+		$ownerName = $row[5];
+		$amount = $row[6];
+		$progress = $row[7];
+		$category = $row[8];
+		
+		//Caclucate the progres bar %
+		$bar = $progress / $amount;
 	}
 
 	//contribute to project
 	if(isset($_POST['pay'])){
 		header("Location: pay.php");
 	}
-	
-	//logging out
-	if(isset($_GET['logout'])){
-		$link=$_GET['logout'];
-		if ($link == 'true'){
-			header("Location: logout.php");
-			exit;
-		}
-	}	
-	
+
+	if (isset($_POST['submit'])) {
+	  $host = $_SERVER['HTTP_HOST'];
+	  $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+	  $extra = 'editproj.php';
+	  header("Location: http://$host$uri/$extra");
+	  exit;
+  }	
 ?> 
 
 <!DOCTYPE html>  
@@ -90,94 +91,41 @@ else{
 -->
 
 <!-- Main Body -->
-<?php
-if(!is_null($OWNPROJECT)){
-	echo "
-	<form class='w3-container' method='POST'>
-    <p>      
-    <label class='w3-text-brown'><b>Project Name</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projname</label></p>
+<div class='w3-row'>
+	<div class='w3-col m8 w3-card w3-margin w3-left'>
+		<header class="w3-container w3-brown">
+		  <h1><?php echo $name;?></h1>
+		</header>
 
-    <p>      
-    <label class='w3-text-brown'><b>Project Description</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projdesc</label></p>
+		<div class="w3-container w3-sand">
+			<p><b>Project ends at: </b><?php echo $endDate;?></p>
+			<p><b>Project Description: </b></br><?php echo $description;?></p>
+			<p><b>Category: </b><?php echo $category;?></p>
+			<?php
+			if($UNAME == $ownerName){
+				echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
+			}
+			else{
+				echo "<a href='pay.php' class='w3-button w3-brown'>Fund this Project</a></br></br>";
+			}
+			?>
+		</div>
 
-	<p>      
-    <label class='w3-text-brown'><b>Start Date</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projSDate</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>End Date</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projEDate</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Target Amount</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projamount</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Progress</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projprogress</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Category</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projcat</label></p>
-	
-    <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information..pagenotdone'></button></p>
-	</form>";
-} else if(is_null($OWNPROJECT)){
-	echo "
-	<form class='w3-container' method='POST'>
-    <p>      
-    <label class='w3-text-brown'><b>Project Name</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projname</label></p>
-
-    <p>      
-    <label class='w3-text-brown'><b>Project Description</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projdesc</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Start Date</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projSDate</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>End Date</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projEDate</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Owner Name</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projOName</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Target Amount</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projamount</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Progress</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projprogress</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Category</b></label></p>
-	<p>
-    <label class='w3-text-black w3-border w3-sand'>$projcat</label></p>
-	
-    <input class='w3-btn w3-brown' type='submit' name='pay' value='Contribute to this project...pagenotdone'></button></p>
-	</form>";
-}
-?>
+		<footer class="w3-container w3-brown">
+		  <h6>Project Creator: <?php echo $ownerName;?></h6>
+		</footer>
+	</div>
+	<div class="w3-col m3 w3-card w3-margin w3-right">
+		<header class="w3-container w3-brown">
+			<p>Amount Raised: <?php echo $progress . " of " . $amount;?></p>
+		</header>
+		
+		<div class="w3-light-grey">
+			<div class='w3-green' style='height:24px;width:<?php echo $bar;?>%'></div>
+		</div>
+		<br>
+	</div>
+</div>
 
 <!-- Import Javascript Files -->
 <script src="js/scripts.js"></script>

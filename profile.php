@@ -23,20 +23,6 @@ if(isset($_GET['logout'])){
 	}
 }
 
-//view all Projects
-if (isset($_POST['allProjects'])) {
-	$_SESSION['VIEWMODE'] = NULL;
-	header("Location: view.php");
-	exit;
-}
-
-//view own Projects
-if (isset($_POST['myProjects'])) {
-	$_SESSION['VIEWMODE'] = "OWNPROJECT";
-	header("Location: view.php");
-	exit;
-}
-
 /* for possible step-by-step donate future implementation?
 if (isset($_POST['donate'])) {
 	header("Location: donate.php");
@@ -68,19 +54,21 @@ else{
 
 <!-- Body -->
 <div class="w3-container">
-	<?php
-	//Display user ID
-	echo "<h2>Welcome $UNAME !</h2>";
-	?>
-	<form class="w3-container" method="POST">
-    <p>
-    <input class="w3-btn w3-brown" type="submit" name="allProjects" value="View All Projects"></button>
-	<p>
-	<input class="w3-btn w3-brown" type="submit" name="myProjects" value="View My Projects"></button>
-	<p>
-	<input class="w3-btn w3-brown" type="submit" name="donate" value="ignore this button"></button>
-	</p>
-  </form>
+	<div class="w3-panel w3-brown">
+	  <h1>My Account</h1>
+	</div> 
+	
+	<div class='w3-panel w3-sand w3-leftbar w3-border-brown'>
+		<h3>My Profile (<?php echo $UNAME;?>)</h3>
+
+		<a href='changePassword.php' class='w3-button w3-brown'>Change Password</a></br></br>
+		<a href='updateBillingAddress.php' class='w3-button w3-brown'>Update Billing Address (TBD)</a></br></br>
+	</div>
+	
+	<div class='w3-panel w3-sand w3-leftbar w3-border-brown'>
+		<h3>My Projects</h3>
+		<a href='index.php?search=myprojects' class='w3-button w3-brown'>View My Projects</a></br></br>
+	</div>
 </div>
 
 
