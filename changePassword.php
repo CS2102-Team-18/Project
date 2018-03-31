@@ -45,7 +45,6 @@ echo '<br> ^^^^^^ </br>'; //space placeholder
 		echo '<br>Wrong password credentials</br>';
 	}	
 
-	else if (($_POST[passwordInput] == $_POST[passwordSecondInput]) && ($passwordLength >= 8)){		
 	else if ($_POST[passwordInput] == $_POST[passwordSecondInput]){		
 		$sql = "update users set pssword = '$_POST[passwordInput]' where uid = $UID and username = '$UNAME'";
 
