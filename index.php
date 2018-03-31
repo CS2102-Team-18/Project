@@ -11,12 +11,29 @@
 	$SEARCHVALUE = $_POST['searchvalue'];
 	$SEARCHFIELD = $_POST['searchfield'];
 	
+	$myinvestmentsflag = 0;
+	$pastinvestmentsflag = 0;
+	$totalamountflag = 0;
+
 	//Search Query
 	if($SEARCH == "myprojects"){
 		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME'"); //query for own projects view
-	} else if(isset($SEARCHFIELD) && isset($SEARCHVALUE)){
+	} 
+	else if($SEARCH == "mycompletedprojects"){
+		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME' AND projectStatus = 'COMPLETED'"); //query for own completed projects
+	} 
+	else if ($SEARCH == "myinvestments") {
+		$result = pg_query($db, "SELECT DISTINCT projectid, ownername, amount, projectname, projectdescription, startdate, enddate, targetamount, progress, category FROM investments I NATURAL JOIN projectsownership P WHERE investorname = '$UNAME'" ); 
+		$myinvestmentsflag = 1;
+	}
+	else if ($SEARCH == "pastinvestments"){
+		$result = pg_query($db, "SELECT amount, dateinvested, investmentType, projectID, ownerName, projectName FROM investments I NATURAL JOIN projectsownership P WHERE investorname = '$UNAME' ORDER BY dateinvested desc");
+		$pastinvestmentsflag = 1;
+	}
+	else if(isset($SEARCHFIELD) && isset($SEARCHVALUE)){
 		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')"); //query for search
-	} else {
+	}
+	else {
 		$result = pg_query($db, "SELECT * FROM projectsOwnership"); //query for all projects - default view
 	}
 	
@@ -27,6 +44,74 @@
 		echo "error getting proj from db";
 	}
 
+if ($myinvestmentsflag == 1) {
+	$projects = pg_fetch_all($result);
+	$x = 0;
+	$table_contents = NULL;
+	foreach ($projects as $project){
+		$row = array_values($project);
+		$id = $row[0];
+		$ownerName = $row[1];
+		$amount = $row[2];
+		$name = $row[3];
+		$description = $row[4];
+		$startDate = $row[5];
+		$endDate = $row[6];
+		$targetAmount = $row[7];
+		$progress = $row[8];
+		$category = $row[9];
+		
+		//Caclucate the progres bar %
+		$bar = floor(($progress / $targetAmount) * 100);
+		
+		// $amountRaised = $progress * $targetAmount;
+		
+		// $progressPercent = $progress * 100;
+		
+		//Generate HTML code for each project
+		$table_contents .= "<div class='w3-panel w3-pale-green w3-leftbar w3-border-green'>";
+		$table_contents .= "<h3><b>" . $name . "</b></h3>";
+		$table_contents .= "<p>Amount Raised: " . $progress . "</p>";
+		$table_contents .= "<div class='w3-light-grey w3-quarter'><div class='w3-green' style='height:24px;width:" . $bar . "%'></div></div><br>";
+		$table_contents .= "<p>" . $description. "</p>";
+		$table_contents .= "<a href='?detail=" . $id . $ownerName . "' class='w3-button w3-green'>Go to Project</a>";
+		$table_contents .= "<p class='w3-right'>" . $category . "</p>";
+		$table_contents .= "</div>";
+	}
+	
+// Debug to check if array is correct
+//	echo "$pastinvestmentsflag" ;
+//	echo "$name" ;
+//	echo "amountRaised";
+	}
+	
+	else if ($pastinvestmentsflag == 1) {
+	$projects = pg_fetch_all($result);
+	$x = 0;
+	$table_contents = NULL;
+	foreach ($projects as $project){
+		$row = array_values($project);
+		$amount = $row[0];
+		$dateinvested = $row[1];
+		$investmentType = $row[2];
+		$id = $row[3];
+		$ownerName= $row[4];
+		$projectName = $row[5];
+	
+		//Generate HTML code for each project
+		$table_contents .= "<div class='w3-panel w3-pale-green w3-leftbar w3-border-green'>";
+		$table_contents .= "<h3><b>" . $dateinvested . "</b></h3>";
+		$table_contents .= "<p>Project Name: " . $projectName . "</p>";
+		$table_contents .= "<p>Owner Name: " . $ownerName . "</p>";
+		$table_contents .= "<p>Amount invested: " . $amount . "</p>";
+		$table_contents .= "<p>Payment Type: " . $investmentType . "  </p>";
+		$table_contents .= "<a href='?detail=" . $id . $ownerName . "' class='w3-button w3-green'>Go to Project</a>";
+		$table_contents .= "</div>";
+	}
+	
+	//echo "$pastinvestmentsflag" ;
+	} 
+	else {
 	$projects = pg_fetch_all($result);
 	$x = 0;
 	$table_contents = NULL;
@@ -43,7 +128,7 @@
 		$category = $row[8];
 		
 		//Caclucate the progres bar %
-		$bar = $progress / $amount;
+		$bar = floor(($progress / $amount) * 100);
 		
 		//Generate HTML code for each project
 		$table_contents .= "<div class='w3-panel w3-pale-green w3-leftbar w3-border-green'>";
@@ -54,6 +139,8 @@
 		$table_contents .= "<a href='?detail=" . $id . $ownerName . "' class='w3-button w3-green'>Go to Project</a>";
 		$table_contents .= "<p class='w3-right'>" . $category . "</p>";
 		$table_contents .= "</div>";
+	}
+
 	}
 	
 	if(isset($_GET['detail'])){
@@ -88,7 +175,11 @@ if($UNAME == NULL){
 	echo $menu;
 }
 else{
-	$menu = file_get_contents('menu-loggedin.html');
+	if($_SESSION['ADMIN'] == "true"){
+		$menu = file_get_contents('menu-admin.html');
+	} else {
+		$menu = file_get_contents('menu-loggedin.html');
+	}
 	echo $menu;
 }
 ?>

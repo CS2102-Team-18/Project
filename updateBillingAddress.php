@@ -38,11 +38,13 @@ if($UNAME == NULL){
 	echo $menu;
 }
 else{
-	$menu = file_get_contents('menu-loggedin.html');
+	if($_SESSION['ADMIN'] == "true"){
+		$menu = file_get_contents('menu-admin.html');
+	} else {
+		$menu = file_get_contents('menu-loggedin.html');
+	}
 	echo $menu;
 }
-?>
-
 
 ?> 
 

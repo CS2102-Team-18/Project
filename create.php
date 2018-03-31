@@ -23,8 +23,8 @@
 
 	// Run the query to create a project
 	if (isset($_POST['submit'])) {
-		$sql = "INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category)
-values ('$_POST[projName]', '$_POST[projDesc]', date '$_POST[sDate]', date '$_POST[eDate]', '$idNum', '$UNAME', $_POST[targetAmount], 0, '$_POST[category]')";
+		$sql = "INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
+values ('$_POST[projName]', '$_POST[projDesc]', date '$_POST[sDate]', date '$_POST[eDate]', '$idNum', '$UNAME', $_POST[targetAmount], 0, '$_POST[category]', 'ACTIVE')";
 		$aresult = pg_query($db, $sql);
 		if (!$aresult) {
 			echo "An error occurred\n";
@@ -55,7 +55,11 @@ if($UNAME == NULL){
 	echo $menu;
 }
 else{
-	$menu = file_get_contents('menu-loggedin.html');
+	if($_SESSION['ADMIN'] == "true"){
+		$menu = file_get_contents('menu-admin.html');
+	} else {
+		$menu = file_get_contents('menu-loggedin.html');
+	}
 	echo $menu;
 }
 ?>

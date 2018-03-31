@@ -46,16 +46,20 @@ echo '<br> ^^^^^^ </br>'; //space placeholder
 	}	
 
 	else if (($_POST[passwordInput] == $_POST[passwordSecondInput]) && ($passwordLength >= 8)){		
-		$sqlIn = "UPDATE users SET pssword = '$_POST[passwordInput]' WHERE uid = $UID AND username = '$UNAME'";
-		$result = pg_query($db, $sqlIn);
-		echo 'Password Changed Successfully!';
+	else if ($_POST[passwordInput] == $_POST[passwordSecondInput]){		
+		$sql = "update users set pssword = '$_POST[passwordInput]' where uid = $UID and username = '$UNAME'";
+
+		$result = pg_query($db, $sql);
+		$error = pg_last_error($db);
+		if(strpos($error, 'ERROR') !== false){
+			$pos = strpos($error, 'CONTEXT');
+			echo substr_replace($error, "", $pos, strlen($error));
+			//echo "$error";
+		} else {
+			echo "Password changed successfully!";
+		}
+
 	}
-
-	else if (($_POST[passwordInput] == $_POST[passwordSecondInput]) && ($passwordLength < 8)){
-		echo 'Password must have 8 or more character!';
-}
-
-
 	else {  
 	  	echo 'Password do not match!';
 	}
@@ -81,7 +85,11 @@ if($UNAME == NULL){
 	echo $menu;
 }
 else{
-	$menu = file_get_contents('menu-loggedin.html');
+	if($_SESSION['ADMIN'] == "true"){
+		$menu = file_get_contents('menu-admin.html');
+	} else {
+		$menu = file_get_contents('menu-loggedin.html');
+	}
 	echo $menu;
 }
 ?>

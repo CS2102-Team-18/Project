@@ -23,6 +23,18 @@ if(isset($_GET['logout'])){
 	}
 }
 
+$sqlcheckamountinvested = "SELECT SUM(amount) AS sum FROM investments WHERE investorName =  '$UNAME'";
+$investmentresult = pg_query($db, $sqlcheckamountinvested);
+$investmentfinal = pg_fetch_all($investmentresult);
+$investmentassoc = pg_fetch_assoc($investmentresult);
+
+// $investmentString = sprinf("%d", $investmentassoc[sum]);
+
+// echo '<br> ^^^^^^ </br>'; //space placeholder
+// echo '<br> ^^^^^^ </br>'; //space placeholder
+// echo "$UNAME";
+// echo "$investmentassoc[sum]";
+
 /* for possible step-by-step donate future implementation?
 if (isset($_POST['donate'])) {
 	header("Location: donate.php");
@@ -47,7 +59,11 @@ if($UNAME == NULL){
 	echo $menu;
 }
 else{
-	$menu = file_get_contents('menu-loggedin.html');
+	if($_SESSION['ADMIN'] == "true"){
+		$menu = file_get_contents('menu-admin.html');
+	} else {
+		$menu = file_get_contents('menu-loggedin.html');
+	}
 	echo $menu;
 }
 ?>
@@ -67,7 +83,20 @@ else{
 	
 	<div class='w3-panel w3-sand w3-leftbar w3-border-brown'>
 		<h3>My Projects</h3>
-		<a href='index.php?search=myprojects' class='w3-button w3-brown'>View My Projects</a></br></br>
+		<a href='index.php?search=myprojects' class='w3-button w3-brown'>View My Projects</a>
+		<a href='index.php?search=mycompletedprojects' class='w3-button w3-brown w3-margin-left'>View My Completed Projects</a><br><br>
+	</div>
+
+	<div class='w3-panel w3-sand w3-leftbar w3-border-brown'>
+		<h3>My Investments</h3>
+		<a href='index.php?search=myinvestments' class='w3-button w3-brown'>View My Investment Projects</a></br></br>
+		<a href='index.php?search=pastinvestments' class='w3-button w3-brown'>View My Past Investments</a></br></br>
+		
+	</div>
+	
+	<div class='w3-panel w3-sand w3-leftbar w3-border-brown'>
+	<h3> Total Amount Invested</h3>
+	<p><?php echo $investmentassoc[sum];?></p>
 	</div>
 </div>
 

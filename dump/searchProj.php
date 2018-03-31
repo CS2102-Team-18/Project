@@ -2,30 +2,25 @@
 	session_start();
 	$UID = $_SESSION['UID'];		//retrieve UID
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
-	$VIEWMODE = $_SESSION['VIEWMODE']; //check view mode
-	
+	$SEARCHVALUE = $_SESSION['SEARCHVALUE']; //retrieve search value
+	$SEARCHFIELD = $_SESSION['SEARCHFIELD']; //retrieve search field
 
   	// Connect to the database. 
     include 'db.php';
 	$db = init_db();	
 
-	//Query depending on view mode
-	if($VIEWMODE == "OWNPROJECT"){
-		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME'"); //query for own projects view
-	} else if($VIEWMODE == "SEARCHPROJECT"){
-		$SEARCHVALUE = $_SESSION['SEARCHVALUE']; //retrieve search value
-		$SEARCHFIELD = $_SESSION['SEARCHFIELD']; //retrieve search field
-		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')"); //query for search
-	} else {
-		$result = pg_query($db, "SELECT * FROM projectsOwnership"); //query for all projects - default view
-	}
-
+	//Display searched projects
+	/* debugging
+	echo "<br><br>";
+	echo "<h2>$SEARCHVALUE $SEARCHFIELD</h2>";
+	*/
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')");
 	$rows = pg_fetch_assoc($result);
+
 	if (!$result) {
 		echo "error getting proj from db";
 	}
 
-	//Store results of query
 	$arr = pg_fetch_all($result);
 	$x = 0;
 	$table_contents = NULL;
@@ -90,7 +85,7 @@
 </head>
 
 <body>
-<!-- Navigation Bar -->
+<!-- Nagivation Bar -->
 <?php
 if($UNAME == NULL){
 	$menu = file_get_contents('menu.html');
