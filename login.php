@@ -14,8 +14,10 @@ $db = init_db();
 
 $result = pg_query($db, "SELECT uid FROM users WHERE username = '$_POST[username]' AND pssword = '$_POST[userpass]'");
 $isBannedResult = pg_query($db, "SELECT isBanned FROM users WHERE username = '$_POST[username]' AND pssword = '$_POST[userpass]'");
+$isAdminResult = pg_query($db, "SELECT isAdmin FROM users WHERE username = '$_POST[username]' AND pssword = '$_POST[userpass]'");
 
 $isBanned = pg_fetch_result($isBannedResult, 0, 0);
+$isAdmin = pg_fetch_result($isAdminResult,0 ,0);
 
 
 
@@ -45,6 +47,11 @@ echo '<br>^^^^^^</br>'; //space placeholder
 	}
 
 	else if ($isBanned == 'f') {
+		if($isAdmin == 't') {
+			$_SESSION['ADMIN'] = "true";
+		} else {
+			$_SESSION['ADMIN'] = NULL;
+		}
 		$_SESSION['UID'] = $userRow[uid];
 		$_SESSION['UNAME'] = $_POST[username];
 		$_SESSION['OWNPROJECT'] = NULL;

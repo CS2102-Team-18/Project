@@ -52,30 +52,54 @@
 		
 		//get invest amount, invest type, current date
 		$payvalue = $_POST['payvalue'];
-		$payfield = $_POST['payfield'];
+		$payfield = ucfirst($_POST['payfield']);
 		$dateinvested = date("Y-m-d");
 
-		//get next investmentID
-		$sql = "SELECT MAX(CAST(investmentID AS INT)) + 1 AS maxID FROM investments";
-		$nextIDResult = pg_query($db, $sql);
-		$row = pg_fetch_assoc($nextIDResult);
-		$nextId = $row[maxid];		
-
-		//update investment table in db
-		$result = pg_query($db, "INSERT INTO investments(amount, dateInvested, investmentID, investorName, projectID, ownerName)
-								values ('$payvalue', '$dateinvested', '$nextId', '$UNAME', '$PID', '$PNAME')");
-
-		//update projectsownership in db
-		$sql = "SELECT targetAmount AS targetamount,progress AS progress FROM projectsOwnership WHERE projectID = '$PID' AND ownerName = '$PNAME'";
+		//update investments in db
+		$sql = "insert into investments(amount, dateinvested, investmentid, investorname, investmenttype, projectid, ownername)
+				select '$payvalue', '$dateinvested', CAST((MAX(CAST(investmentID AS INT)) + 1) AS VARCHAR(100)), '$UNAME', '$payfield', '$PID', '$PNAME'
+				from investments";
 		$result = pg_query($db, $sql);
-		$row = pg_fetch_assoc($result);
-		$targetamount = $row[targetamount];
-		$progress = $row[progress];
-		$progress = (($progress * $targetamount) + $payvalue) / $targetamount;
+		
+		if (!$result) {
+			echo "error updating investments from db";
+		}
 
-		//debug
-		// "<br><h2>$progress</h2>";
-		$result = pg_query($db, "UPDATE projectsOwnership SET progress = '$progress' WHERE projectID = '$PID' AND ownerName = '$PNAME'");
+		$sql = "DO LANGUAGE plpgsql
+				$$
+				DECLARE x INTEGER := $payvalue;
+				BEGIN
+					BEGIN
+						update projectsownership set progress = progress + x where projectid = '$PID' and ownername = '$PNAME';
+						if (x<0) THEN RAISE EXCEPTION USING
+							ERRCODE ='PVLTZ',
+							MESSAGE ='pay value less than zero',
+							hint='update with higher value';
+						end if;
+						exception when SQLSTATE 'PVLTZ' then raise notice 'error';
+					END;
+
+					BEGIN
+						update projectsownership
+						set projectstatus = CASE
+											WHEN progress >= targetamount then 'COMPLETED'
+											ELSE projectstatus
+											END
+						where projectid = '$PID' and ownername = '$PNAME';
+						if((select progress from projectsownership where projectid='1' and ownername='Alice') >= (select targetamount from projectsownership where projectid='1' and ownername='Alice')) THEN
+							RAISE NOTICE 'Hello';
+						END IF;
+					END;
+				raise notice 'Payment value: %', x;
+				END;
+				$$";
+
+		$result = pg_query($db, $sql);
+		if (!$result) {
+			echo "error updating projectsOwnership from db";
+		}
+
+		//header("Location: index.php");
 	}
 	
 	//logging out
@@ -86,7 +110,6 @@
 			exit;
 		}
 	}	
-	
 ?> 
 
 <!DOCTYPE html>  
@@ -108,7 +131,11 @@ if($UNAME == NULL){
 	echo $menu;
 }
 else{
-	$menu = file_get_contents('menu-loggedin.html');
+	if($_SESSION['ADMIN'] == "true"){
+		$menu = file_get_contents('menu-admin.html');
+	} else {
+		$menu = file_get_contents('menu-loggedin.html');
+	}
 	echo $menu;
 }
 ?>

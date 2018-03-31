@@ -16,16 +16,7 @@
 	if (!$result) {
 		echo "error getting proj from db";
 	}
-	/* debugging
-	echo "<br><br><br>HELLO"; //testing
-	echo "<br>";
-	echo "$PID";
-	echo "<br>";
-	echo "$PNAME";
-	echo "<br>debugging----ignore above this line";
 
-	echo "<br>";
-	*/
 	$projects = pg_fetch_all($result);
 
 	foreach ($projects as $project){
@@ -39,9 +30,10 @@
 		$amount = $row[6];
 		$progress = $row[7];
 		$category = $row[8];
+		$status = $row[9];
 		
 		//Caclucate the progres bar %
-		$bar = $progress / $amount;
+		$bar = floor(($progress / $amount) * 100);
 	}
 
 	//contribute to project
@@ -49,13 +41,29 @@
 		header("Location: pay.php");
 	}
 
-	if (isset($_POST['submit'])) {
-	  $host = $_SERVER['HTTP_HOST'];
-	  $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-	  $extra = 'editproj.php';
-	  header("Location: http://$host$uri/$extra");
-	  exit;
-  }	
+	if (isset($_POST['finish'])) {
+		$result = pg_query($db, "UPDATE projectsOwnership SET projectStatus = 'COMPLETED' WHERE projectID = '$PID' AND ownerName = '$PNAME'");
+		if(!$result){
+			echo "<br>Error updating project status to completed.<br>";
+		}
+		header("Location: detailedproj.php");
+	}
+
+	if (isset($_POST['halt'])) {
+		$result = pg_query($db, "UPDATE projectsOwnership SET projectStatus = 'HALTED' WHERE projectID = '$PID' AND ownerName = '$PNAME'");
+		if(!$result){
+			echo "<br>Error updating project status to halted.<br>";
+		}
+		header("Location: detailedproj.php");
+	}	
+
+	if (isset($_POST['resume'])) {
+		$result = pg_query($db, "UPDATE projectsOwnership SET projectStatus = 'ACTIVE' WHERE projectID = '$PID' AND ownerName = '$PNAME'");
+		if(!$result){
+			echo "<br>Error updating project status to resume.<br>";
+		}		
+		header("Location: detailedproj.php");
+	}
 ?> 
 
 <!DOCTYPE html>  
@@ -77,7 +85,11 @@ if($UNAME == NULL){
 	echo $menu;
 }
 else{
-	$menu = file_get_contents('menu-loggedin.html');
+	if($_SESSION['ADMIN'] == "true"){
+		$menu = file_get_contents('menu-admin.html');
+	} else {
+		$menu = file_get_contents('menu-loggedin.html');
+	}
 	echo $menu;
 }
 ?>
@@ -98,11 +110,15 @@ else{
 		</header>
 
 		<div class="w3-container w3-sand">
+			<p><b>Project Status: </b><?php echo $status;?></p>
 			<p><b>Project ends at: </b><?php echo $endDate;?></p>
 			<p><b>Project Description: </b></br><?php echo $description;?></p>
 			<p><b>Category: </b><?php echo $category;?></p>
 			<?php
-			if($UNAME == $ownerName){
+			if($status == "COMPLETED"){
+				//do nothing
+			}
+			else if($UNAME == $ownerName){
 				echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
 			}
 			else{
@@ -122,9 +138,28 @@ else{
 		
 		<div class="w3-light-grey">
 			<div class='w3-green' style='height:24px;width:<?php echo $bar;?>%'></div>
-		</div>
-		<br>
+		</div>			
 	</div>
+
+	<div class="w3-col m3 w3-right">
+		<form class="w3-container" method="POST">
+			<?php
+			if($status == "ACTIVE") {
+				echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+					  <p><input class='w3-btn w3-brown' type='submit' name='halt' value='Halt Project'></p>
+					  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";
+
+			} else if($status == "HALTED") {
+				echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+					  <p><input class='w3-btn w3-brown' type='submit' name='resume' value='Resume Project'></p>
+					  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+			} else {
+				echo "<p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+			}
+			?>
+		</div>		
+	</div>
+	
 </div>
 
 <!-- Import Javascript Files -->
