@@ -13,17 +13,17 @@ create trigger passwordTooShort
 	when (char_length(new.pssword) < 8)
 	EXECUTE PROCEDURE passwordTooShort();
 
-create or replace function samePassword()
-	returns trigger as $$
-	BEGIN
-		raise exception 'Password was not changed!';
-		return null;
-	END;
-	$$ language plpgsql;
+-- create or replace function samePassword()
+	-- returns trigger as $$
+	-- BEGIN
+		-- raise exception 'Password was not changed!';
+		-- return null;
+	-- END;
+	-- $$ language plpgsql;
 
-create trigger samePasswordError
-	before update
-	on users
-	for each ROW
-	when (old.pssword = new.pssword)
-	EXECUTE PROCEDURE samePassword();
+-- create trigger samePasswordError
+	-- before update
+	-- on users
+	-- for each ROW
+	-- when (old.pssword = new.pssword)
+	-- EXECUTE PROCEDURE samePassword();
