@@ -25,5 +25,5 @@ create trigger samePasswordError
 	before update
 	on users
 	for each ROW
-	when (old.pssword = new.pssword)
+	when (old.pssword = new.pssword AND old.billingAddress = new.billingAddress AND old.isAdmin = new.isAdmin AND old.isBanned = new.isBanned)
 	EXECUTE PROCEDURE samePassword();
