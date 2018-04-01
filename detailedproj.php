@@ -64,6 +64,18 @@
 			echo "<br>Error updating project status to resume.<br>";
 		}		
 		header("Location: detailedproj.php");
+		
+			if(isset($_GET['detail'])){
+		$link=$_GET['detail'];
+		if(!empty($link)){
+			//set session variables for project id and project name..acts as a global variable?
+			$userid = preg_replace('/\D/', '', $link); //retrieve userID
+			$username = preg_replace('/[0-9]+/', '', $link); //retrieve userName
+			$_SESSION['CUID']=$userid;
+			$_SESSION['CUNAME']=$username;
+			header("Location: edituser.php");
+		}
+	}
 	}
 ?> 
 
@@ -124,7 +136,11 @@ else{
 				echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
 			}
 			else{
+				
+				if ($_SESSION['ADMIN'] == "true"){
+				echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
 				echo "<a href='pay.php' class='w3-button w3-brown'>Fund this Project</a></br></br>";
+				}
 			}
 			?>
 		</div>
