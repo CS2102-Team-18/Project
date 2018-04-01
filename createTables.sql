@@ -21,7 +21,8 @@ create table projectsOwnership (
 	category varchar(20),
 	projectStatus varchar(10),
 	PRIMARY KEY (projectID, ownerName),
-	FOREIGN KEY (ownerName) REFERENCES users(userName));
+	FOREIGN KEY (ownerName) REFERENCES users(userName)
+	on update cascade);
 
 create table investments (
 	amount int NOT NULL CHECK (amount > 0),
@@ -34,9 +35,11 @@ create table investments (
     CONSTRAINT chk_InvestmentType CHECK (investmentType IN ('eNETS', 'Paypal', 'Credit Card')),
 	PRIMARY KEY (investmentID),
 	FOREIGN KEY (projectID, ownerName) REFERENCES projectsOwnership(projectID, ownerName)
-	on delete cascade,
+	on delete cascade
+	on update cascade,
 	FOREIGN KEY (investorName) REFERENCES users(userName)
-	on delete cascade);
+	on delete cascade
+	on update cascade);
 
 
 INSERT INTO users(UID, userName, pssword, dateJoined, isAdmin, isBanned, billingAddress)
