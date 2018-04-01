@@ -9,11 +9,9 @@
 		
 
 if (isset($_POST['submit'])) {
-	if ($_POST[passwordInput] == $_POST[passwordSecondInput]){		
-		$sqlIn = "UPDATE users SET pssword = '$_POST[passwordInput]' WHERE uid = $UID AND username = '$UNAME'";
+		$sqlIn = "UPDATE users SET billingaddress = '$_POST[billingAddressInput]' WHERE uid = $UID AND username = '$UNAME'";
 		$result = pg_query($db, $sqlIn);
 		echo 'Password Changed Successfully!';
-	}
 }
 
 	else {  
@@ -74,23 +72,14 @@ else{
 <!-- Register Form -->
 <div class="w3-card-4">
   <div class="w3-container w3-brown">
-    <h2>Register</h2>
+    <h2>Change Billing Address</h2>
   </div>
   <form class="w3-container" action="updateBillingAddress.php" method="POST">
     <p>      
-    <label class="w3-text-brown"><b>Username</b></label>
-    <input class="w3-input w3-border w3-sand" name="usernameInput" type="text"></p>
-    <p>      
-    <label class="w3-text-brown"><b>Password</b></label>
-    <input class="w3-input w3-border w3-sand" name="passwordInput" type="password"></p>
-	<p>      
-    <label class="w3-text-brown"><b>Confirm Password</b></label>
-    <input class="w3-input w3-border w3-sand" name="passwordSecondInput" type="password"></p>
-    <p>
     <label class="w3-text-brown"><b>Billing Address</b></label>
     <input class="w3-input w3-border w3-sand" name="billingAddressInput" type="text"></p>
     <p>
-    <input class="w3-btn w3-brown" type="submit" name="submit" value="Register"></button></p>
+    <input class="w3-btn w3-brown" type="submit" name="submit" value="Update Billing Address"></button></p>
 <p></p>
   </form>
 <p></p>
