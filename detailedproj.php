@@ -34,6 +34,9 @@
 		
 		//Caclucate the progres bar %
 		$bar = floor(($progress / $amount) * 100);
+		if ($bar > 100){
+			$bar = 100;
+		}
 
 	}
 
@@ -136,10 +139,11 @@ else{
 				echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
 			}
 			else{
-				
 				if ($_SESSION['ADMIN'] == "true"){
-				echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
-				echo "<a href='pay.php' class='w3-button w3-brown'>Fund this Project</a></br></br>";
+					echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
+				}
+				else {
+					echo "<a href='pay.php' class='w3-button w3-brown'>Fund this Project</a></br></br>";
 				}
 			}
 			?>
@@ -162,17 +166,19 @@ else{
 	<div class="w3-col m3 w3-right">
 		<form class="w3-container" method="POST">
 			<?php
-			if($status == "ACTIVE") {
-				echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='halt' value='Halt Project'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";
+			if($UNAME == $ownerName || $_SESSION['ADMIN'] == true) {
+				if($status == "ACTIVE") {
+					echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='halt' value='Halt Project'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";
 
-			} else if($status == "HALTED") {
-				echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='resume' value='Resume Project'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
-			} else {
-				echo "<p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+				} else if($status == "HALTED") {
+					echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='resume' value='Resume Project'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+				} else {
+					echo "<p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+				}
 			}
 			?>
 		</div>		

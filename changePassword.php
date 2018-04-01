@@ -2,9 +2,10 @@
 	session_start();
 	$UID = $_SESSION['UID'];	//retrieve UID
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
+	$panelMsg = "";
 
   	// Connect to the database. 
-       include 'db.php';
+    include 'db.php';
 	$db = init_db();	
 		
 //logging out
@@ -36,13 +37,12 @@ $validPassword = pg_fetch_result ($validPasswordResult, 0, 0);
 //echo "$textType";
 
 $passwordLength = strlen("$_POST[passwordInput]");
-echo '<br> ^^^^^^ </br>'; //space placeholder
 //echo '<br> test </br>';
 //echo "$passwordLength";
 
 
 	if ("$_POST[oldPassword]" != "$validPassword") {
-		echo '<br>Wrong password credentials</br>';
+		$panelMsg = "Wrong password credentials";
 	}	
 
 	else if ($_POST[passwordInput] == $_POST[passwordSecondInput]){		
@@ -55,12 +55,12 @@ echo '<br> ^^^^^^ </br>'; //space placeholder
 			echo substr_replace($error, "", $pos, strlen($error));
 			//echo "$error";
 		} else {
-			echo "Password changed successfully!";
+			$panelMsg = "Password changed successfully!";
 		}
 
 	}
 	else {  
-	  	echo 'Password do not match!';
+	  	$panelMsg = "Password do not match!";
 	}
 }
 
@@ -91,6 +91,10 @@ else{
 	}
 	echo $menu;
 }
+//Display error message pannel
+if($panelMsg != ""){
+	echo "<div class='w3-panel w3-yellow'><p>" . $panelMsg . "</p></div>";
+}
 ?>
 
 
@@ -100,9 +104,11 @@ else{
     <h2>Change Password</h2>
   </div>
   <form class="w3-container" action="changePassword.php" method="POST">
-    <label class="w3-text-brown"><b>Old Password</b></label>
+    <p> 
+	<label class="w3-text-brown"><b>Old Password</b></label>
     <input class="w3-input w3-border w3-sand" name="oldPassword" type="password"></p>    
-    <label class="w3-text-brown"><b>Password</b></label>
+	<p>
+	<label class="w3-text-brown"><b>Password</b></label>
     <input class="w3-input w3-border w3-sand" name="passwordInput" type="password"></p>
     <p>      
     <label class="w3-text-brown"><b>Confirm Password</b></label>

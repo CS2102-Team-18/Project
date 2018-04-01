@@ -4,6 +4,10 @@
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 	$CUID= $_SESSION['CUID']; //retrive changeable UID
  	// $CUNAME = $_SESSION['CUNAME']; //retrieve changeable USERNAME
+	$adminButtonValue;
+	$adminButtonName;
+	$banButtonValue;
+	$banButtonName;
 	
 	
 	if($UNAME == NULL){
@@ -23,7 +27,7 @@
 		}
 
 		if ($_POST[editPassword] <> NULL) {
-		$sqlEditPassword = "UPDATE  users SET pssword = '$_POST[editPassword]' WHERE  uid = '$CUID'";
+		$sqlEditPassword = "UPDATE  users SET password = '$_POST[editPassword]' WHERE  uid = '$CUID'";
 		$editPasswordResult = pg_query($db, $sqlEditPassword);
 		echo "$editPasswordResult";
 		}
@@ -37,37 +41,27 @@
 	}
 	
 	if (isset($_POST['submitAdmin'])) {	
-
 		$sqlEditAdmin = "UPDATE users SET isadmin = TRUE WHERE  uid = '$CUID'";
 		$editAdminResult = pg_query($db, $sqlEditAdmin);
 		echo "$editAdminResult";
-	
-
 	}
 	
 	if (isset($_POST['submitBan'])) {	
-
 		$sqlEditBan = "UPDATE users SET isbanned = TRUE WHERE  uid = '$CUID'";
 		$editBanResult = pg_query($db, $sqlEditBan);
 		echo "$editBanResult";
-
 	}
 	
-		if (isset($_POST['removeBan'])) {	
-
+	if (isset($_POST['removeBan'])) {	
 		$sqlRemoveBan = "UPDATE users SET isbanned = FALSE WHERE  uid = '$CUID'";
 		$editBanResult = pg_query($db, $sqlRemoveBan);
 		echo "$editBanResult";
-
 	}
 	
-		if (isset($_POST['removeAdmin'])) {	
-
+	if (isset($_POST['removeAdmin'])) {	
 		$sqlRemoveAdmin = "UPDATE users SET isadmin = FALSE WHERE  uid = '$CUID'";
 		$editAdminResult = pg_query($db, $sqlRemoveAdmin);
 		echo "$editAdminResult";
-	
-
 	}
 	
 	//Display selected project based on $PID and $PNAME
@@ -77,24 +71,6 @@
 	if (!$result) {
 		echo "error getting proj from db";
 	}
-	
-
-
-	// echo "<br><br><br>HELLO"; //testing
-	// echo "<br>";
-	// echo "$PID";
-	// echo "<br>";
-	// echo "$PNAME";
-	// echo "<br>debugging----ignore above this line";
-		// echo "^^^^^";
-	// echo "^^^^^'";
-	// echo "$CUID";
-	// echo "$CUNAME";
-	// echo "$editUserNameResult";
-	// echo "$editAddressResult";
-	// echo "$editPasswordResult";
-
-	// echo "<br>";
 
 	$details = pg_fetch_all($result);
 
@@ -102,28 +78,29 @@
 		$row = array_values($details);
 		$uid = $row[0];
 		$username = $row[1];
-		$pssword = $row[2];
+		$password = $row[2];
 		$isadmin = $row[4];
 		$isbanned = $row[5];
 		$billingAddress = $row[6];
 	}
-		echo "<br><br><br>HELLO"; //testing
-	echo "<br>";
-	echo "$PID";
-	echo "<br>";
-	echo "$PNAME";
-	echo "<br>debugging----ignore above this line";
-		echo "^^^^^";
-	echo "^^^^^'";
-	echo "$CUID";
-	echo "$CUNAME";
-	echo "$editUserNameResult";
-	echo "$editAddressResult";
-	echo "$editPasswordResult";
-
-	echo "<br>";
-	echo "$isadmin";
-	echo "$isbanned";
+	
+	if($isadmin == "t"){
+		$adminButtonValue = "Remove Admin";
+		$adminButtonName = "removeAdmin";
+	}
+	else {
+		$adminButtonValue = "Make Admin";
+		$adminButtonName = "submitAdmin";
+	}
+	
+	if($isbanned == "t") {
+		$banButtonValue = "Remove Ban";
+		$banButtonName = "removeBan";
+	}
+	else {
+		$banButtonValue = "Ban User";
+		$banButtonName = "submitBan";
+	}
 
 ?> 
 
@@ -155,92 +132,32 @@ else{
 }
 ?>
 
-<!-- Slide Show
-<div class="w3-content w3-section" style="max-height:500px">
-  <img class="mySlides" src="img/water.jpg" style="width:100%">
-  <img class="mySlides" src="img/castle.jpg" style="width:100%">
-  <img class="mySlides" src="img/road.jpg" style="width:100%">
-</div>
--->
-
 <!-- Main Body -->
-<?php
-if($isadmin == 't' && $isbanned == 'f'){
-	echo "
+<div class="w3-card-4">
+	<div class="w3-container w3-brown">
+		<h2>Edit User</h2>
+	</div>
 	<form class='w3-container' method='POST'>
-    <p><label class='w3-text-brown'><b>Username</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editUserName' value='" . $username. "' type='text'></p>
+		<p>
+		<input class='w3-btn w3-brown' type='submit' name='<?php echo $adminButtonName;?>' value='<?php echo $adminButtonValue;?>'></button>
+		<input class='w3-btn w3-brown' type='submit' name='<?php echo $banButtonName;?>' value='<?php echo $banButtonValue;?>'></button></p>
+		
+		<p>
+		<label class='w3-text-brown'><b>Username</b></label>
+		<input class='w3-input w3-border w3-sand' name='editUserName' value='<?php echo $username;?>' type='text'></p>
 
-    <p><label class='w3-text-brown'><b>Password</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editPassword' value='" . $pssword . "' type='text'></p>
+		<p>
+		<label class='w3-text-brown'><b>Password</b></label>
+		<input class='w3-input w3-border w3-sand' name='editPassword' value='<?php echo $password;?>' type='password'></p>
 
-	<p><label class='w3-text-brown'><b>Billing Address</b></label></p>     
-	<p><input class='w3-input w3-border w3-sand' name='editBillingAddress' value='" . $billingaddress . "' type='text'></p>
-	
-	 <input class='w3-btn w3-brown' type='submit' name='removeAdmin' value='Remove Admin'></button></p>
-	 <input class='w3-btn w3-brown' type='submit' name='submitBan' value='Ban User'></button></p>
-	   
-	 <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit User Information'></button></p>
-	</form>";
- }
- 
- if($isadmin == 'f' && $isbanned == 't' ){
-	echo "
-	<form class='w3-container' method='POST'>
-    <p><label class='w3-text-brown'><b>Username</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editUserName' value='" . $username. "' type='text'></p>
-
-    <p><label class='w3-text-brown'><b>Password</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editPassword' value='" . $pssword . "' type='text'></p>
-
-	<p><label class='w3-text-brown'><b>Billing Address</b></label></p>     
-	<p><input class='w3-input w3-border w3-sand' name='editBillingAddress' value='" . $billingaddress . "' type='text'></p>
-	
-	 <input class='w3-btn w3-brown' type='submit' name='submitAdmin' value='Make Admin'></button></p>
-	 <input class='w3-btn w3-brown' type='submit' name='removeBan' value='Remove Ban'></button></p>
-	   
-	 <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit User Information'></button></p>
-	</form>";
- }
- 
- if($isadmin == 't' && $isbanned == 't'){
-	echo "
-	<form class='w3-container' method='POST'>
-    <p><label class='w3-text-brown'><b>Username</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editUserName' value='" . $username. "' type='text'></p>
-
-    <p><label class='w3-text-brown'><b>Password</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editPassword' value='" . $pssword . "' type='text'></p>
-
-	<p><label class='w3-text-brown'><b>Billing Address</b></label></p>     
-	<p><input class='w3-input w3-border w3-sand' name='editBillingAddress' value='" . $billingaddress . "' type='text'></p>
-	
-	 <input class='w3-btn w3-brown' type='submit' name='removeAdmin' value='Remove Admin'></button></p>
-	 <input class='w3-btn w3-brown' type='submit' name='removeBan' value='Remove Ban'></button></p>
-	   
-	 <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit User Information'></button></p>
-	</form>";
- }
- 
-  if($isadmin == 'f' && $isbanned == 'f' ){
-	echo "
-	<form class='w3-container' method='POST'>
-    <p><label class='w3-text-brown'><b>Username</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editUserName' value='" . $username. "' type='text'></p>
-
-    <p><label class='w3-text-brown'><b>Password</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editPassword' value='" . $pssword . "' type='text'></p>
-
-	<p><label class='w3-text-brown'><b>Billing Address</b></label></p>     
-	<p><input class='w3-input w3-border w3-sand' name='editBillingAddress' value='" . $billingaddress . "' type='text'></p>
-	
-	 <input class='w3-btn w3-brown' type='submit' name='submitAdmin' value='Make Admin'></button></p>
-	 <input class='w3-btn w3-brown' type='submit' name='submitBan' value='Ban User'></button></p>
-	   
-	 <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit User Information'></button></p>
-	</form>";
- }
-?>
+		<p>
+		<label class='w3-text-brown'><b>Billing Address</b></label>    
+		<input class='w3-input w3-border w3-sand' name='editBillingAddress' value='<?php echo $billingAddress;?>' type='text'></p>
+		
+		<p>
+		<input class='w3-btn w3-brown' type='submit' name='submit' value='Edit User Information'></button></p>
+	</form>
+</div>
 
 <!-- Import Javascript Files -->
 <script src="js/scripts.js"></script>

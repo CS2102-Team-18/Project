@@ -1,48 +1,48 @@
 <?php
-	session_start();
-	$UID = $_SESSION['UID'];		//retrieve UID
-	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
+session_start();
+$UID = $_SESSION['UID'];		//retrieve UID
+$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 
-  	// Connect to the database. 
-    include 'db.php';
-	$db = init_db();	
+// Connect to the database. 
+include 'db.php';
+$db = init_db();	
 
-	$SEARCH = $_GET['search'];
-	$SEARCHVALUE = $_POST['searchvalue'];
-	$SEARCHFIELD = $_POST['searchfield'];
-	
-	$myinvestmentsflag = 0;
-	$pastinvestmentsflag = 0;
-	$totalamountflag = 0;
+$SEARCH = $_GET['search'];
+$SEARCHVALUE = $_POST['searchvalue'];
+$SEARCHFIELD = $_POST['searchfield'];
 
-	//Search Query
-	if($SEARCH == "myprojects"){
-		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME'"); //query for own projects view
-	} 
-	else if($SEARCH == "mycompletedprojects"){
-		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME' AND projectStatus = 'COMPLETED'"); //query for own completed projects
-	} 
-	else if ($SEARCH == "myinvestments") {
-		$result = pg_query($db, "SELECT DISTINCT projectid, ownername, amount, projectname, projectdescription, startdate, enddate, targetamount, progress, category FROM investments I NATURAL JOIN projectsownership P WHERE investorname = '$UNAME'" ); 
-		$myinvestmentsflag = 1;
-	}
-	else if ($SEARCH == "pastinvestments"){
-		$result = pg_query($db, "SELECT amount, dateinvested, investmentType, projectID, ownerName, projectName FROM investments I NATURAL JOIN projectsownership P WHERE investorname = '$UNAME' ORDER BY dateinvested desc");
-		$pastinvestmentsflag = 1;
-	}
-	else if(isset($SEARCHFIELD) && isset($SEARCHVALUE)){
-		$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')"); //query for search
-	}
-	else {
-		$result = pg_query($db, "SELECT * FROM projectsOwnership"); //query for all projects - default view
-	}
-	
-	//$result = pg_query($db, "SELECT * FROM projectsOwnership");
-	$rows = pg_fetch_assoc($result);
+$myinvestmentsflag = 0;
+$pastinvestmentsflag = 0;
+$totalamountflag = 0;
 
-	if (!$result) {
-		echo "error getting proj from db";
-	}
+//Search Query
+if($SEARCH == "myprojects"){
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME'"); //query for own projects view
+} 
+else if($SEARCH == "mycompletedprojects"){
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME' AND projectStatus = 'COMPLETED'"); //query for own completed projects
+} 
+else if ($SEARCH == "myinvestments") {
+	$result = pg_query($db, "SELECT DISTINCT projectid, ownername, amount, projectname, projectdescription, startdate, enddate, targetamount, progress, category FROM investments I NATURAL JOIN projectsownership P WHERE investorname = '$UNAME'" ); 
+	$myinvestmentsflag = 1;
+}
+else if ($SEARCH == "pastinvestments"){
+	$result = pg_query($db, "SELECT amount, dateinvested, investmentType, projectID, ownerName, projectName FROM investments I NATURAL JOIN projectsownership P WHERE investorname = '$UNAME' ORDER BY dateinvested desc");
+	$pastinvestmentsflag = 1;
+}
+else if(isset($SEARCHFIELD) && isset($SEARCHVALUE)){
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')"); //query for search
+}
+else {
+	$result = pg_query($db, "SELECT * FROM projectsOwnership"); //query for all projects - default view
+}
+
+//$result = pg_query($db, "SELECT * FROM projectsOwnership");
+$rows = pg_fetch_assoc($result);
+
+if (!$result) {
+	echo "error getting proj from db";
+}
 
 if ($myinvestmentsflag == 1) {
 	$projects = pg_fetch_all($result);
@@ -63,6 +63,9 @@ if ($myinvestmentsflag == 1) {
 		
 		//Caclucate the progres bar %
 		$bar = floor(($progress / $targetAmount) * 100);
+		if ($bar > 100){
+			$bar = 100;
+		}
 		
 		// $amountRaised = $progress * $targetAmount;
 		
@@ -105,7 +108,7 @@ if ($myinvestmentsflag == 1) {
 		$table_contents .= "<p>Owner Name: " . $ownerName . "</p>";
 		$table_contents .= "<p>Amount invested: " . $amount . "</p>";
 		$table_contents .= "<p>Payment Type: " . $investmentType . "  </p>";
-		$table_contents .= "<a href='?detail=" . $id . $ownerName . "' class='w3-button w3-green'>Go to Project</a>";
+		$table_contents .= "<p><a href='?detail=" . $id . $ownerName . "' class='w3-button w3-green'>Go to Project</a></p>";
 		$table_contents .= "</div>";
 	}
 	

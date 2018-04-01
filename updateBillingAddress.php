@@ -2,21 +2,23 @@
 	session_start();
 	$UID = $_SESSION['UID'];	//retrieve UID
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
-
+	$panelMsg = "";
+	
   	// Connect to the database. 
-       include 'db.php';
+	include 'db.php';
 	$db = init_db();	
 		
 
 if (isset($_POST['submit'])) {
-		$sqlIn = "UPDATE users SET billingaddress = '$_POST[billingAddressInput]' WHERE uid = $UID AND username = '$UNAME'";
-		$result = pg_query($db, $sqlIn);
-		echo 'Password Changed Successfully!';
-}
-
-	else {  
-	  echo 'Password do not match!';
+	$sqlIn = "UPDATE users SET billingaddress = '$_POST[billingAddressInput]' WHERE uid = $UID AND username = '$UNAME'";
+	$result = pg_query($db, $sqlIn);
+	if ($result) {
+		$panelMsg = "Billing Address Successfully Changed";
 	}
+	else {
+		$panelMsg = "An unexpected error occured";
+	}
+}
 ?> 
 
 <!DOCTYPE html>  
@@ -27,7 +29,6 @@ if (isset($_POST['submit'])) {
   <link rel="stylesheet" href="css/w3.css">
   
 </head>
-
 <body>
 <!-- Nagivation Bar -->
 <?php
@@ -43,32 +44,11 @@ else{
 	}
 	echo $menu;
 }
-
+//Display error message pannel
+if($panelMsg != ""){
+	echo "<div class='w3-panel w3-yellow'><p>" . $panelMsg . "</p></div>";
+}
 ?> 
-
-<!DOCTYPE html>  
-<head>
-  <title>UPDATE PostgreSQL data with PHP</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <!-- Import CSS Files -->
-  <link rel="stylesheet" href="css/w3.css">
-  
-</head>
-
-<body>
-<!-- Nagivation Bar -->
-<?php
-if($UNAME == NULL){
-	$menu = file_get_contents('menu.html');
-	echo $menu;
-}
-else{
-	$menu = file_get_contents('menu-loggedin.html');
-	echo $menu;
-}
-?>
-
-
 <!-- Register Form -->
 <div class="w3-card-4">
   <div class="w3-container w3-brown">
