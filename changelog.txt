@@ -1,0 +1,44 @@
+NOTE : Recreate your database. Ignore the samepassword trigger for now.
+
+
+
+updated db - added projectStatus under projectownership
+updated db - added triggers and stored procedures for users
+
+updated create.php - project is given ACTIVE status upon creation
+
+updated pay.php - redid pay.php so that it follows current database format, 
+		  pressing pay brings the user back to index.php,
+		  having progress>=target amount sets project to become COMPLETE
+
+updated profile.php - added a button to view completed projects
+updated profile.php - added a button to view investment projects(shows all projects you have invested in before)
+updated profile.php - added a button to view all past transactions sorted by date in desc order
+
+updated index.php - added an else-if statement to query for user's own completed projects
+updated index.php - added an else-if statement to query for projects user has invested in
+updated index.php - added an else-if statement to query for user's investments
+
+updated detailedproj.php - added buttons for halting/resuming/deleting project
+
+ADMIN CONTROL PANEL ADDITIONS
+added menu-admin.html - navigation bar for admin users
+added users.php - brings up a view of user
+
+updated detailedproj.php - setup session for edituser.php
+
+updated editproj.php - add button for admin to edit all projects  
+updated editproj.php - add update statements
+
+updated createTables.sql - add on update cascade
+updated createTables.sql - insert 8 character password for all users
+
+updated profile.php - update button to remove (TBD)
+
+created updateBillingAddress.php
+
+created edituser.php 
+
+
+
+updated users.php - updated to set session for uid and uname that is going to be changed
