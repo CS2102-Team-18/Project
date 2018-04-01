@@ -1,4 +1,4 @@
- <?php
+<?php
 	session_start();
 	$UID = $_SESSION['UID'];		//retrieve UID
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
@@ -178,7 +178,7 @@ else{
 	if($_SESSION['ADMIN'] == "true"){
 		$menu = file_get_contents('menu-admin.html');
 	} else {
-		$menu = file_get_contents('menu-loggedin.html');
+	    $menu = file_get_contents('menu-loggedin.html');
 	}
 	echo $menu;
 }
