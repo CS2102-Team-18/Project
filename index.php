@@ -17,7 +17,7 @@ $totalamountflag = 0;
 
 //Search Query
 if($SEARCH == "myprojects"){
-	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME'"); //query for own projects view
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME' AND projectStatus <> 'DELETED'"); //query for own projects view
 } 
 else if($SEARCH == "mycompletedprojects"){
 	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE ownername = '$UNAME' AND projectStatus = 'COMPLETED'"); //query for own completed projects
@@ -31,14 +31,14 @@ else if ($SEARCH == "pastinvestments"){
 	$pastinvestmentsflag = 1;
 }
 else if(isset($SEARCHFIELD) && isset($SEARCHVALUE)){
-	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')"); //query for search
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE (LOWER($SEARCHFIELD) LIKE LOWER('%$SEARCHVALUE%')) AND projectStatus <> 'DELETED'"); //query for search
 }
 else {
-	$result = pg_query($db, "SELECT * FROM projectsOwnership"); //query for all projects - default view
+	$result = pg_query($db, "SELECT * FROM projectsOwnership WHERE projectStatus <> 'DELETED'"); //query for all projects - default view
 }
 
 //$result = pg_query($db, "SELECT * FROM projectsOwnership");
-$rows = pg_fetch_assoc($result);
+//$rows = pg_fetch_assoc($result);
 
 if (!$result) {
 	echo "error getting proj from db";
@@ -216,7 +216,15 @@ else{
 
 <div class="w3-container">
 	<?php
-	echo $table_contents;
+	if($SEARCH == "myprojects"){
+		if(empty($projects)){
+			echo "<h3><b>You have no projects!</b></h3>";
+		} else {
+			echo $table_contents;
+		}
+	} else {
+		echo $table_contents;
+	}
 	?>
 </div>
   

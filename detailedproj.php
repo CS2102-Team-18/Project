@@ -68,17 +68,25 @@
 		}		
 		header("Location: detailedproj.php");
 		
-			if(isset($_GET['detail'])){
-		$link=$_GET['detail'];
-		if(!empty($link)){
-			//set session variables for project id and project name..acts as a global variable?
-			$userid = preg_replace('/\D/', '', $link); //retrieve userID
-			$username = preg_replace('/[0-9]+/', '', $link); //retrieve userName
-			$_SESSION['CUID']=$userid;
-			$_SESSION['CUNAME']=$username;
-			header("Location: edituser.php");
+		if(isset($_GET['detail'])){
+			$link=$_GET['detail'];
+			if(!empty($link)){
+				//set session variables for project id and project name..acts as a global variable?
+				$userid = preg_replace('/\D/', '', $link); //retrieve userID
+				$username = preg_replace('/[0-9]+/', '', $link); //retrieve userName
+				$_SESSION['CUID']=$userid;
+				$_SESSION['CUNAME']=$username;
+				header("Location: edituser.php");
+			}
 		}
 	}
+
+	if (isset($_POST['delete'])) {
+		$result = pg_query($db, "UPDATE projectsOwnership SET projectStatus = 'DELETED' WHERE projectID = '$PID' AND ownerName = '$PNAME'");
+		if(!$result){
+			echo "<br>Error deleting project from database<br>";
+		}
+		header("Location: detailedproj.php");
 	}
 ?> 
 
@@ -140,6 +148,7 @@ else{
 			}
 			else{
 				if ($_SESSION['ADMIN'] == "true"){
+					echo "<a href='pay.php' class='w3-button w3-brown w3-margin-right'>Fund this Project</a>";
 					echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
 				}
 				else {

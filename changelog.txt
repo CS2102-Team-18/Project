@@ -1,3 +1,10 @@
+---Week 11---
+Added delete project functionalities
+updated index.php - searching for own projects display error messages if user has no projects
+updated index.php - projects with 'deleted' as project status will not show up in the search
+
+
+---Week 10---
 NOTE : Recreate your database. Ignore the samepassword trigger for now.
 
 
