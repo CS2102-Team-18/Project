@@ -16,28 +16,28 @@
 	if (isset($_POST['submit'])) {	
 
 		if ($_POST[editProjName] <> NULL) {
-		$sqlEditProjName = "UPDATE projectsownership SET projectname = '$_POST[editProjName]' WHERE ownername = '$UNAME' AND projectid = '$PID'";
+		$sqlEditProjName = "UPDATE projectsownership SET projectname = '$_POST[editProjName]' WHERE ownername = '$PNAME' AND projectid = '$PID'";
 		$editProjNameResult = pg_query($db, $sqlEditProjName);
 		echo "$editProjNameResult";
 		}
 
 		if ($_POST[editProjDesc] <> NULL) {
-		$sqlEditProjDesc = "UPDATE projectsownership SET projectdescription = '$_POST[editProjDesc]' WHERE ownername = '$UNAME' AND projectid = '$PID'";
+		$sqlEditProjDesc = "UPDATE projectsownership SET projectdescription = '$_POST[editProjDesc]' WHERE ownername = '$PNAME' AND projectid = '$PID'";
 		$editProjNameResult = pg_query($db, $sqlEditProjDesc);
 		}
 
 		if ($_POST[editEndDate] <> NULL) {
-		$sqlEditEndDate = "UPDATE projectsownership SET enddate = '$_POST[editEndDate]' WHERE ownername = '$UNAME' AND projectid = '$PID'";
+		$sqlEditEndDate = "UPDATE projectsownership SET enddate = '$_POST[editEndDate]' WHERE ownername = '$PNAME' AND projectid = '$PID'";
 		$editProjNameResult = pg_query($db, $sqlEditEndDate);
 		}
 
 		if ($_POST[editTargetAmt] <> NULL) {
-		$sqlEditTargetAmt = "UPDATE projectsownership SET targetamount = '$_POST[editTargetAmt]' WHERE ownername = '$UNAME' AND projectid = '$PID'";
+		$sqlEditTargetAmt = "UPDATE projectsownership SET targetamount = '$_POST[editTargetAmt]' WHERE ownername = '$PNAME' AND projectid = '$PID'";
 		$editProjNameResult = pg_query($db, $sqlEditTargetAmt);
 		}
 
 		if ($_POST[editCat] <> NULL) {
-		$sqlEditCat = "UPDATE projectsownership SET category = '$_POST[editCat]' WHERE ownername = '$UNAME' AND projectid = '$PID'";
+		$sqlEditCat = "UPDATE projectsownership SET category = '$_POST[editCat]' WHERE ownername = '$PNAME' AND projectid = '$PID'";
 		$editProjNameResult = pg_query($db, $sqlEditCat);
 		}
 	}
@@ -119,6 +119,34 @@ else{
 <!-- Main Body -->
 <?php
 if($UNAME == $ownerName){
+	echo "
+	<form class='w3-container' method='POST'>
+    <p><label class='w3-text-brown'><b>Project Name</b></label></p>
+	<p><input class='w3-input w3-border w3-sand' name='editProjName' value='" . $name. "' type='text'></p>
+
+    <p><label class='w3-text-brown'><b>Project Description</b></label></p>
+	<p><input class='w3-input w3-border w3-sand' name='editProjDesc' value='" . $description . "' type='text'></p>
+
+	<p><label class='w3-text-brown'><b>Start Date (Cannot be changed)</b></label></p>
+	<p><label class='w3-text-black'>$startDate</label></p>
+
+	<p><label class='w3-text-brown'><b>End Date (YYYY-MM-DD)</b></label></p>
+	<p><input class='w3-input w3-border w3-sand' name='editEndDate' value='" . $endDate . "' type='text'></p>
+
+	<p><label class='w3-text-brown'><b>Target Amount</b></label></p>
+	<p><input class='w3-input w3-border w3-sand' name='editTargetAmt' value='" . $amount . "' type='text'></p>
+
+	<p><label class='w3-text-brown'><b>Progress (Cannot be changed)</b></label></p>
+	<p><label class='w3-text-black'>$projprogress</label></p>
+
+	<p><label class='w3-text-brown'><b>Category</b></label></p>     
+	<p><input class='w3-input w3-border w3-sand' name='editCat' value='" . $category . "' type='text'></p>
+	
+    <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information'></button></p>
+	</form>";
+}
+
+else if($_SESSION['ADMIN'] == TRUE){
 	echo "
 	<form class='w3-container' method='POST'>
     <p><label class='w3-text-brown'><b>Project Name</b></label></p>

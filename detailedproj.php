@@ -34,6 +34,10 @@
 		
 		//Caclucate the progres bar %
 		$bar = floor(($progress / $amount) * 100);
+		if ($bar > 100){
+			$bar = 100;
+		}
+
 	}
 
 	//contribute to project
@@ -62,6 +66,26 @@
 		if(!$result){
 			echo "<br>Error updating project status to resume.<br>";
 		}		
+		header("Location: detailedproj.php");
+		
+		if(isset($_GET['detail'])){
+			$link=$_GET['detail'];
+			if(!empty($link)){
+				//set session variables for project id and project name..acts as a global variable?
+				$userid = preg_replace('/\D/', '', $link); //retrieve userID
+				$username = preg_replace('/[0-9]+/', '', $link); //retrieve userName
+				$_SESSION['CUID']=$userid;
+				$_SESSION['CUNAME']=$username;
+				header("Location: edituser.php");
+			}
+		}
+	}
+
+	if (isset($_POST['delete'])) {
+		$result = pg_query($db, "UPDATE projectsOwnership SET projectStatus = 'DELETED' WHERE projectID = '$PID' AND ownerName = '$PNAME'");
+		if(!$result){
+			echo "<br>Error deleting project from database<br>";
+		}
 		header("Location: detailedproj.php");
 	}
 ?> 
@@ -115,6 +139,7 @@ else{
 			<p><b>Project Description: </b></br><?php echo $description;?></p>
 			<p><b>Category: </b><?php echo $category;?></p>
 			<?php
+
 			if($status == "COMPLETED"){
 				//do nothing
 			}
@@ -122,7 +147,13 @@ else{
 				echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
 			}
 			else{
-				echo "<a href='pay.php' class='w3-button w3-brown'>Fund this Project</a></br></br>";
+				if ($_SESSION['ADMIN'] == "true"){
+					echo "<a href='pay.php' class='w3-button w3-brown w3-margin-right'>Fund this Project</a>";
+					echo "<a href='editproj.php' class='w3-button w3-brown'>Edit Project Information</a></br></br>";
+				}
+				else {
+					echo "<a href='pay.php' class='w3-button w3-brown'>Fund this Project</a></br></br>";
+				}
 			}
 			?>
 		</div>
@@ -144,22 +175,23 @@ else{
 	<div class="w3-col m3 w3-right">
 		<form class="w3-container" method="POST">
 			<?php
-			if($status == "ACTIVE") {
-				echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='halt' value='Halt Project'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";
+			if($UNAME == $ownerName || $_SESSION['ADMIN'] == true) {
+				if($status == "ACTIVE") {
+					echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='halt' value='Halt Project'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";
 
-			} else if($status == "HALTED") {
-				echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='resume' value='Resume Project'></p>
-					  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
-			} else {
-				echo "<p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+				} else if($status == "HALTED") {
+					echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='resume' value='Resume Project'></p>
+						  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+				} else {
+					echo "<p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+				}
 			}
 			?>
 		</div>		
 	</div>
-	
 </div>
 
 <!-- Import Javascript Files -->

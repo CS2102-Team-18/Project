@@ -2,6 +2,8 @@
 session_start();
 
 $UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
+$panelMsg = $_SESSION['panelMsg'];
+unset($_SESSION['panelMsg']);
 
 if($UNAME != NULL){
 	header("Location: profile.php");
@@ -20,30 +22,15 @@ $isBanned = pg_fetch_result($isBannedResult, 0, 0);
 $isAdmin = pg_fetch_result($isAdminResult,0 ,0);
 
 
-
 if (isset($_POST['submit'])) {
-
-//echo '<br>test</br>';
-echo '<br>^^^^^^</br>'; //space placeholder
-//echo $isBanned;
-
-//$typeIsBanned = gettype($isBanned);
-//echo "$typeIsBanned";
-
-	
 	$userRow = pg_fetch_assoc($result);
 	$userFound = pg_num_rows($result);
 	if ($userFound < 1) {
-		echo "<div class=\"w3-panel w3-yellow\">
-		  <p>Invaild Usernname or Password</p>
-		</div>";
+		$panelMsg = "Invaild Usernname or Password";
 	} 
 
 	else if ($isBanned == 't') {
-		echo "<div class=\"w3-panel w3-red\">
-		  <h3>User Banned!</h3>
-		  <p>Please contact the administrator for more details.</p>
-		</div>";
+		$panelMsg = "User is Banned! Please contact the administrator for more details";
 	}
 
 	else if ($isBanned == 'f') {
@@ -60,7 +47,6 @@ echo '<br>^^^^^^</br>'; //space placeholder
 		$extra = 'profile.php';
 		header("Location: http://$host$uri/$extra");
 		exit;
-		//echo "found matching user with UID = $userRow[uid]";
 	}
 }
 
@@ -90,6 +76,10 @@ if($UNAME == NULL){
 else{
 	$menu = file_get_contents('menu-loggedin.html');
 	echo $menu;
+}
+//Display error message pannel
+if($panelMsg != ""){
+	echo "<div class='w3-panel w3-yellow'><p>" . $panelMsg . "</p></div>";
 }
 ?>
 

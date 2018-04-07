@@ -56,8 +56,20 @@
 		$table_contents .= "<p>Admin: " . $isadmin . "</p>";
 		$table_contents .= "<p>Banned: " . $isbanned . "</p>";
 		$table_contents .= "<p>Billing Address: " . $billingaddress . "</p>";
-		$table_contents .= "<a href='edituser.php' class='w3-button w3-green'>Edit User</a>";
+		$table_contents .= "<a href='?detail=" . $userid . $username . "' class='w3-button w3-green'>Edit User Details</a>";
 		$table_contents .= "<br><br></div>";
+	}
+
+	if(isset($_GET['detail'])){
+		$link=$_GET['detail'];
+		if(!empty($link)){
+			//set session variables for project id and project name..acts as a global variable?
+			$userid = preg_replace('/\D/', '', $link); //retrieve userID
+			$username = preg_replace('/[0-9]+/', '', $link); //retrieve userName
+			$_SESSION['CUID']=$userid;
+			$_SESSION['CUNAME']=$username;
+			header("Location: edituser.php");
+		}
 	}
 ?> 
 

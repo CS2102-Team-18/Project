@@ -19,7 +19,7 @@ if(isset($_GET['logout'])){
 	$link=$_GET['logout'];
 	if ($link == 'true'){
 		header("Location: logout.php");
-		exit;
+		exit();
 	}
 }
 
@@ -62,7 +62,7 @@ else{
 	if($_SESSION['ADMIN'] == "true"){
 		$menu = file_get_contents('menu-admin.html');
 	} else {
-		$menu = file_get_contents('menu-loggedin.html');
+	    $menu = file_get_contents('menu-loggedin.html');
 	}
 	echo $menu;
 }
@@ -78,7 +78,7 @@ else{
 		<h3>My Profile (<?php echo $UNAME;?>)</h3>
 
 		<a href='changePassword.php' class='w3-button w3-brown'>Change Password</a></br></br>
-		<a href='updateBillingAddress.php' class='w3-button w3-brown'>Update Billing Address (TBD)</a></br></br>
+		<a href='updateBillingAddress.php' class='w3-button w3-brown'>Update Billing Address </a></br></br>
 	</div>
 	
 	<div class='w3-panel w3-sand w3-leftbar w3-border-brown'>
