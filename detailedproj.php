@@ -173,26 +173,25 @@ else{
 	</div>
 
 	<div class="w3-col m3 w3-right w3-container w3-card w3-margin w3-sand">
-		<header class="w3-brown w3-container">
-			<p>Edit Project Controls</p>
-		</header>
-		<form method="POST">
-			<?php
-			if($UNAME == $ownerName || $_SESSION['ADMIN'] == true) {
-				if($status == "ACTIVE") {
-					echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
-						  <p><input class='w3-btn w3-brown' type='submit' name='halt' value='Halt Project'></p>
-						  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";
+	<form method="POST">
+	<?php
+	if($UNAME == $ownerName || $_SESSION['ADMIN'] == true) {
+		echo "<header class='w3-brown w3-container'><p>Edit Project Controls</p></header>";
+		if($status == "ACTIVE") {
+			echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+				  <p><input class='w3-btn w3-brown' type='submit' name='halt' value='Halt Project'></p>
+				  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";
 
-				} else if($status == "HALTED") {
-					echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
-						  <p><input class='w3-btn w3-brown' type='submit' name='resume' value='Resume Project'></p>
-						  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
-				} else {
-					echo "<p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
-				}
-			}
-			?>
+		} else if($status == "HALTED") {
+			echo "<p><input class='w3-btn w3-brown' type='submit' name='finish' value='Mark Project as Completed'></p>
+				  <p><input class='w3-btn w3-brown' type='submit' name='resume' value='Resume Project'></p>
+				  <p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+		} else {
+			echo "<p><input class='w3-btn w3-brown' type='submit' name='delete' value='Delete Project'></p>";			
+		}
+		
+	}
+	?>
 		</div>		
 	</div>
 </div>
