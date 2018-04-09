@@ -115,32 +115,38 @@ else{
   <img class="mySlides" src="img/road.jpg" style="width:100%">
 </div>
 -->
-
+<div class="w3-card w3-margin">
+	<header class="w3-container w3-brown">
+		<h1>Edit Project Form</h1>
+	</header>
+	<div class="w3-sand">
 <!-- Main Body -->
 <?php
 if($UNAME == $ownerName){
 	echo "
 	<form class='w3-container' method='POST'>
     <p><label class='w3-text-brown'><b>Project Name</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editProjName' value='" . $name. "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editProjName' value='" . $name. "' type='text'></p>
 
     <p><label class='w3-text-brown'><b>Project Description</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editProjDesc' value='" . $description . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editProjDesc' value='" . $description . "' type='text'></p>
 
-	<p><label class='w3-text-brown'><b>Start Date (Cannot be changed)</b></label></p>
-	<p><label class='w3-text-black'>$startDate</label></p>
+	<p>
+	<label class='w3-text-brown'><b>Start Date (Cannot be changed): </b></label>
+	<label class='w3-text-black'>$startDate</label></p>
 
 	<p><label class='w3-text-brown'><b>End Date (YYYY-MM-DD)</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editEndDate' value='" . $endDate . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editEndDate' value='" . $endDate . "' type='text'></p>
 
 	<p><label class='w3-text-brown'><b>Target Amount</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editTargetAmt' value='" . $amount . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editTargetAmt' value='" . $amount . "' type='text'></p>
 
-	<p><label class='w3-text-brown'><b>Progress (Cannot be changed)</b></label></p>
-	<p><label class='w3-text-black'>$projprogress</label></p>
+	<p>
+	<label class='w3-text-brown'><b>Progress (Cannot be changed): </b></label>
+	<label class='w3-text-black'>$progress</label></p>
 
 	<p><label class='w3-text-brown'><b>Category</b></label></p>     
-	<p><input class='w3-input w3-border w3-sand' name='editCat' value='" . $category . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editCat' value='" . $category . "' type='text'></p>
 	
     <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information'></button></p>
 	</form>";
@@ -150,30 +156,32 @@ else if($_SESSION['ADMIN'] == TRUE){
 	echo "
 	<form class='w3-container' method='POST'>
     <p><label class='w3-text-brown'><b>Project Name</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editProjName' value='" . $name. "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editProjName' value='" . $name. "' type='text'></p>
 
     <p><label class='w3-text-brown'><b>Project Description</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editProjDesc' value='" . $description . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editProjDesc' value='" . $description . "' type='text'></p>
 
 	<p><label class='w3-text-brown'><b>Start Date (Cannot be changed)</b></label></p>
 	<p><label class='w3-text-black'>$startDate</label></p>
 
 	<p><label class='w3-text-brown'><b>End Date (YYYY-MM-DD)</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editEndDate' value='" . $endDate . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editEndDate' value='" . $endDate . "' type='text'></p>
 
 	<p><label class='w3-text-brown'><b>Target Amount</b></label></p>
-	<p><input class='w3-input w3-border w3-sand' name='editTargetAmt' value='" . $amount . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editTargetAmt' value='" . $amount . "' type='text'></p>
 
 	<p><label class='w3-text-brown'><b>Progress (Cannot be changed)</b></label></p>
 	<p><label class='w3-text-black'>$projprogress</label></p>
 
 	<p><label class='w3-text-brown'><b>Category</b></label></p>     
-	<p><input class='w3-input w3-border w3-sand' name='editCat' value='" . $category . "' type='text'></p>
+	<p><input class='w3-input w3-border' name='editCat' value='" . $category . "' type='text'></p>
 	
     <input class='w3-btn w3-brown' type='submit' name='submit' value='Edit Project Information'></button></p>
 	</form>";
 }
 ?>
+	</div>
+</div>
 
 <!-- Import Javascript Files -->
 <script src="js/scripts.js"></script>

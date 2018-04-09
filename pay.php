@@ -149,60 +149,57 @@ else{
 -->
 
 <!-- Main Body -->
-<div class="w3-card-4">
-	<div class="w3-container w3-brown">
-		<h2>Fund this Project!</h2>
+<div class="w3-card w3-margin">
+	<header class="w3-container w3-brown">
+		<h1>Fund this Project!</h1>
+	</header>
+	<div class="w3-container">
+		<form class='w3-container' method='POST'>
+			<p>
+			<label class='w3-text-brown'><b>Contribution Amount:</b></label>
+			<input class='w3-input w3-border w3-sand' name='payvalue' type='number'></p>
+			<p>
+			<label class='w3-text-brown'><b>Make Contribution With:</b></label>
+			<select name='payfield'>
+				<option value='paypal'>Paypal</option>
+				<option value='enets'>eNETS</option>
+				<option value='creditcard'>Credit Card</option>
+			</select>
+			<input class='w3-btn w3-brown' type='submit' name='pay' value='Contribute!'></button></p>
+		</form>
 	</div>
-<?php //need to update database with payment types
-echo "
-	<form class='w3-container' method='POST'>
-	<p>
-	<label class='w3-text-brown'><b>Contribution Amount:</b></label>
-	<input class='w3-input w3-border w3-sand' name='payvalue' type='number'></p>
-	<p>
-	<label class='w3-text-brown'><b>Make Contribution With:</b></label>
-    <select name='payfield'>
-		<option value='paypal'>Paypal</option>
-		<option value='enets'>eNETS</option>
-		<option value='creditcard'>Credit Card</option>
-    </select>
-    <input class='w3-btn w3-brown' type='submit' name='pay' value='Contribute!'></button></p>
+</div>
 
-	<div class='w3-bottombar w3-border-brown'></div>
-	
-    <p>      
-    <label class='w3-text-brown'><b>Project Name</b></label></p>
-    <label class='w3-text-black'>$projname</label></p>
+<div class='w3-bottombar w3-border-brown w3-margin'></div>
 
-    <p>      
-    <label class='w3-text-brown'><b>Project Description</b></label></p>
-    <label class='w3-text-black'>$projdesc</label></p>
+<div class="w3-card w3-margin">
+	<header class="w3-container w3-brown">
+		<h1><?php echo $projname;?></h1>
+	</header>
+	<div class="w3-container w3-sand">
+		<p>      
+		<label class='w3-text-brown'><b>Project Description: </b></label>
+		<label class='w3-text-black'><?php echo $projdesc;?></label></p>
 
-	<p>      
-    <label class='w3-text-brown'><b>Start Date</b></label></p>
-    <label class='w3-text-black'>$projSDate</label></p>
+		<p>      
+		<label class='w3-text-brown'><b>Start Date: </b></label>
+		<label class='w3-text-black'><?php echo $projSDate;?></label></p>
 
-	<p>      
-    <label class='w3-text-brown'><b>End Date</b></label></p>
-    <label class='w3-text-black'>$projEDate</label></p>
+		<p>      
+		<label class='w3-text-brown'><b>End Date: </b></label>
+		<label class='w3-text-black'><?php echo $projEDate;?></label></p>
 
-	<p>      
-    <label class='w3-text-brown'><b>Owner Name</b></label></p>
-    <label class='w3-text-black'>$projOName</label></p>
+		<p>      
+		<label class='w3-text-brown'><b>Target: </b></label>
+		<label class='w3-text-black'><?php echo $projamount;?></label></p>
 
-	<p>      
-    <label class='w3-text-brown'><b>Target Amount</b></label></p>
-    <label class='w3-text-black'>$projamount</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Progress</b></label></p>
-    <label class='w3-text-black'>$projprogress</label></p>
-
-	<p>      
-    <label class='w3-text-brown'><b>Category</b></label></p>
-    <label class='w3-text-black'>$projcat</label></p>
-	</form>";
-?>
+		<p>      
+		<label class='w3-text-brown'><b>Category: </b></label>
+		<label class='w3-text-black'><?php echo $projcat;?></label></p>
+	</div>
+	<footer class="w3-container w3-brown">
+		<h6>Project Creator: <?php echo $projOName;?></h6>
+	</footer>
 </div>
 
 <!-- Import Javascript Files -->

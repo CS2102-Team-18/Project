@@ -69,7 +69,7 @@
 	$rows = pg_fetch_assoc($result);
 
 	if (!$result) {
-		echo "error getting proj from db";
+		$panelMsg = "error getting proj from db";
 	}
 
 	$details = pg_fetch_all($result);
@@ -129,6 +129,10 @@ else{
 		$menu = file_get_contents('menu-loggedin.html');
 	}
 	echo $menu;
+}
+//Display message pannel
+if($panelMsg != ""){
+	echo "<div class='w3-panel w3-yellow'><p>" . $panelMsg . "</p></div>";
 }
 ?>
 

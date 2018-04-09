@@ -172,8 +172,11 @@ else{
 		</div>			
 	</div>
 
-	<div class="w3-col m3 w3-right">
-		<form class="w3-container" method="POST">
+	<div class="w3-col m3 w3-right w3-container w3-card w3-margin w3-sand">
+		<header class="w3-brown w3-container">
+			<p>Edit Project Controls</p>
+		</header>
+		<form method="POST">
 			<?php
 			if($UNAME == $ownerName || $_SESSION['ADMIN'] == true) {
 				if($status == "ACTIVE") {
