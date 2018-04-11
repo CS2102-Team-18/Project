@@ -60,9 +60,10 @@
 				select '$payvalue', '$dateinvested', CAST((MAX(CAST(investmentID AS INT)) + 1) AS VARCHAR(100)), '$UNAME', '$payfield', '$PID', '$PNAME'
 				from investments";
 		$result = pg_query($db, $sql);
+		$_SESSION['panelMsg'] = "Project Successfully funded";
 		
 		if (!$result) {
-			echo "error updating investments from db";
+			$_SESSION['panelMsg'] = "Error updating investments from db";
 		}
 
 		$sql = "DO LANGUAGE plpgsql
@@ -96,10 +97,11 @@
 
 		$result = pg_query($db, $sql);
 		if (!$result) {
-			echo "error updating projectsOwnership from db";
+			$_SESSION['panelMsg'] = "Error updating projectsOwnership from db";
 		}
 
-		//header("Location: index.php");
+		header("Location: detailedproj.php");
+		
 	}
 	
 	//logging out
@@ -120,7 +122,7 @@
 
   <!-- Import CSS Files -->
   <link rel="stylesheet" href="css/w3.css">
-  
+
 </head>
 
 <body>

@@ -91,7 +91,7 @@ else{
 	}
 	echo $menu;
 }
-//Display error message pannel
+//Display message pannel
 if($panelMsg != ""){
 	echo "<div class='w3-panel w3-yellow'><p>" . $panelMsg . "</p></div>";
 }

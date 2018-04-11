@@ -4,6 +4,7 @@
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 	$PID = $_SESSION['PID'];
 	$PNAME = $_SESSION['PNAME'];
+	$panelMsg = "";
 	
 	if($UNAME == NULL){
 		header("Location: login.php");
@@ -40,6 +41,8 @@
 		$sqlEditCat = "UPDATE projectsownership SET category = '$_POST[editCat]' WHERE ownername = '$PNAME' AND projectid = '$PID'";
 		$editProjNameResult = pg_query($db, $sqlEditCat);
 		}
+		
+		$panelMsg = "Project successfully updated";
 	}
 	
 	//Display selected project based on $PID and $PNAME
@@ -47,18 +50,8 @@
 	$rows = pg_fetch_assoc($result);
 
 	if (!$result) {
-		echo "error getting proj from db";
+		$panelMsg = "error getting proj from db";
 	}
-	/* debugging
-	echo "<br><br><br>HELLO"; //testing
-	echo "<br>";
-	echo "$PID";
-	echo "<br>";
-	echo "$PNAME";
-	echo "<br>debugging----ignore above this line";
-
-	echo "<br>";
-	*/
 	$projects = pg_fetch_all($result);
 
 	foreach ($projects as $project){
@@ -72,11 +65,6 @@
 		$amount = $row[6];
 		$progress = $row[7];
 		$category = $row[8];
-	}
-
-	//contribute to project
-	if(isset($_POST['pay'])){
-		header("Location: pay.php");
 	}
 ?> 
 
@@ -105,6 +93,10 @@ else{
 		$menu = file_get_contents('menu-loggedin.html');
 	}
 	echo $menu;
+}
+//Display message pannel
+if($panelMsg != ""){
+	echo "<div class='w3-panel w3-yellow'><p>" . $panelMsg . "</p></div>";
 }
 ?>
 

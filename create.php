@@ -34,6 +34,7 @@ values ('$_POST[projName]', '$_POST[projDesc]', date '$_POST[sDate]', date '$_PO
 			echo "$_POST[targetAmount]";
 		} else {
 			echo "Create project successful\n";
+			header("Location: index.php");
 		}
 	}
 ?> 

@@ -4,6 +4,8 @@
 	$UNAME = $_SESSION['UNAME'];	//retrieve USERNAME
 	$PID = $_SESSION['PID'];
 	$PNAME = $_SESSION['PNAME'];
+	$panelMsg = $_SESSION['panelMsg'];
+	unset($_SESSION['panelMsg']);
 
   	// Connect to the database. 
     include 'db.php';
@@ -115,6 +117,10 @@ else{
 		$menu = file_get_contents('menu-loggedin.html');
 	}
 	echo $menu;
+}
+//Display message pannel
+if($panelMsg != ""){
+	echo "<div class='w3-panel w3-yellow'><p>" . $panelMsg . "</p></div>";
 }
 ?>
 
