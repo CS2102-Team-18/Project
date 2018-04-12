@@ -111,19 +111,19 @@ values ('23', 'wilson', '12345678', date '2018-02-03', false, false, 'Blk 95, Li
 
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
-values ('Seeking funding for startup', 'new start up involved in property technology', date '2018-02-10', date '2018-03-10', 1, 'Bob', 10000, 0, 'Start Ups funding', 'ACTIVE');
+values ('Seeking funding for startup', 'new start up involved in property technology', date '2018-02-10', date '2018-03-10', 1, 'Bob', 10000, 3000, 'Start Ups funding', 'ACTIVE');
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
 values ('Seeking funding for mobile app', 'mobile app called instagram', date '2018-02-15', date '2018-06-15', '1', 'Alice', 50000, 1000, 'Mobile App Funding', 'ACTIVE');
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
-values ('Seeking funding for building new hospital', 'TTS hospital', date '2018-02-20', date '2018-07-20', '2', 'Bob', 1000000, 0, 'Others', 'ACTIVE');
+values ('Seeking funding for building new hospital', 'TTS hospital', date '2018-02-20', date '2018-07-20', '2', 'Bob', 1000000, 500, 'Others', 'ACTIVE');
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
-values ('Building a new software app', 'Need some funding to rent a server', date '2018-02-20', date '2018-07-20', '1', 'Ted', 1000, 0, 'Mobile App Funding', 'ACTIVE');
+values ('Building a new software app', 'Need some funding to rent a server', date '2018-02-20', date '2018-07-20', '1', 'Ted', 1000, 200, 'Mobile App Funding', 'ACTIVE');
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
-values ('New robot funding', 'I need funds to build a robot', date '2018-02-21', date '2018-07-20', '2', 'Ted', 1000000, 0, 'Others', 'ACTIVE');
+values ('New robot funding', 'I need funds to build a robot', date '2018-02-21', date '2018-07-20', '2', 'Ted', 1000000, 5000, 'Others', 'ACTIVE');
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
 values ('New game idea', 'Need funding for this new game called AAA', date '2018-04-02', date '2018-10-20', '2', 'Alice', 1000000, 0, 'Mobile App Funding', 'ACTIVE');
@@ -135,7 +135,7 @@ INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDat
 values ('Creating a band', 'Need some funding for band instruments', date '2018-01-24', date '2018-07-20', '2', 'David', 1000, 0, 'Others', 'ACTIVE');
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
-values ('Food delivery startup', 'fund my food delivery start up', date '2018-02-23', date '2018-07-20', '3', 'David', 1000000, 0, 'Others', 'ACTIVE');
+values ('Food delivery startup', 'fund my food delivery start up', date '2018-02-23', date '2018-07-20', '3', 'David', 1000000, 1500, 'Others', 'ACTIVE');
 
 INSERT INTO projectsOwnership(projectName, projectDescription, startDate, endDate, projectID, ownerName, targetAmount, progress, category, projectStatus)
 values ('handicraft project funding', 'Appreciate it if you could fund this small project', date '2018-02-20', date '2018-05-20', '3', 'Alice', 200, 0, 'Others', 'ACTIVE');
@@ -147,4 +147,24 @@ values (500, date '2018-02-23', '2', 'Bob', 'eNETS', '1', 'Alice');
 INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
 values (500, date '2018-02-23', '1', 'David', 'Paypal', '1', 'Alice');
 
+
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (500, date '2018-02-23', '3', 'David', 'Paypal', '2', 'Bob');
+
+
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (5000, date '2018-02-23', '4', 'David', 'Paypal', '2', 'Ted');
+
+
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (1500, date '2018-02-23', '5', 'David', 'Paypal', '1', 'Bob');
+
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (200, date '2018-02-23', '6', 'Umbridge', 'Paypal', '1', 'Ted');
+
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (1500, date '2018-02-23', '7', 'Umbridge', 'Paypal', '1', 'Bob');
+
+INSERT INTO investments(amount, dateInvested, investmentid, investorName, investmentType, projectID, ownerName)
+values (1500, date '2018-02-23', '8', 'Umbridge', 'Paypal', '3', 'David');
 
